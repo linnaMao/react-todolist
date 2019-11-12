@@ -1,0 +1,15 @@
+.container {
+  .navLeft {
+    background-color: green;
+    height: calc(100vh);
+  }
+  .main {
+    height: calc(100vh);
+    background-color: blue;
+    overflow: auto;
+  }
+  .navRight {
+    background-color: green;
+    height: calc(100vh);
+  }
+}
