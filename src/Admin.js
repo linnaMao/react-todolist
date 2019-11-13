@@ -12,10 +12,52 @@ class Admin extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      click: false
+      todoList:[],
+      value: ''
     }
   }
+
+  // componentDidMount() {
+  //   // 相等于调接口
+  //   this.getList()
+  // }
+
+  // getList = () => {
+  //   // 新增时首先获取已有的，如果没有，那就是个空数组
+  //   const lists = localStorage.getItem('todolist') || '[]';
+
+  //   localStorage.setItem("value", "")
+  //   const value = localStorage.getItem("value")
+    
+  //   // 转成json
+  //   const jsonList = JSON.parse(lists)
+
+  //   this.setState({
+  //     todoList: jsonList,
+  //     value
+  //   })
+  // }
+
+  handleChange = (e) => {
+    this.setState({
+      value:e.target.value
+    })
+  }
+
+  handlePress = (e) => {
+    const { todoList } = this.state
+    const { value } = this.state
+    if (e.nativeEvent.keyCode === 13 && value!=="") {
+      this.setState({
+        todoList: [...todoList, value],
+        value: ''
+      })
+      console.log(todoList)
+    }
+  }
+
   render() {
+    const { todoList, value } = this.state
     return (
       <div>
         <Row type="flex" className={styled.container}>
@@ -25,9 +67,14 @@ class Admin extends React.Component {
           <Col span={15} className={styled.main}>
             <Header />
             <Row className={styled.content}>
-              <Home />
+              <Home value={value} todoList={todoList} />
             </Row>
-            <Footer />
+            <Footer 
+              value={value} 
+              todoList={todoList} 
+              handleChange = {this.handleChange}
+              handlePress = {this.handlePress}
+              />
           </Col>
           <Col span={5} className={styled.navRight}>
             <NavRight />
