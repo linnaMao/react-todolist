@@ -1,11 +1,10 @@
 import React from 'react';
-import 'antd/dist/antd.css'
+import 'antd/dist/antd.css';
 
 function App() {
   return (
     <div>
       {this.props.children}
-      {/* 路由转换 */}
     </div>
   );
 }

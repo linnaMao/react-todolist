@@ -1,15 +1,25 @@
+* {
+  list-style: none;
+}
 .container {
   .navLeft {
-    background-color: green;
     height: calc(100vh);
+    min-width: 200px;
   }
   .main {
+    background-color: #60acea;
+    padding: 0 25px;
     height: calc(100vh);
-    background-color: blue;
-    overflow: auto;
+    .content {
+      height: 76%;
+      position: relative;
+      overflow: auto;
+      margin-bottom: 25px;
+    }
   }
+  
   .navRight {
-    background-color: green;
     height: calc(100vh);
+    // display: none
   }
 }

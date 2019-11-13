@@ -1,0 +1,29 @@
+.todoList {
+  padding: 0;
+  li {
+    height: 50px;
+    line-height: 50px;
+    width: 100%;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 0 20px;
+    margin-top: 2px;
+    &:hover {
+      opacity: 0.9;
+    }
+    .star {
+      float: right;
+      height: 50px;
+      line-height: 54px;
+      color: #60acea;
+      font-size: 18px;
+    }
+    .finish {
+      font-size: 18px;
+      color: #60acea;
+      line-height: 54px;
+      padding-right: 10px;
+    }
+  }
+}

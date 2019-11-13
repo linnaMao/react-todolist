@@ -9,11 +9,15 @@ class Irouter extends React.Component {
       <Route>
       {/* 引入APP接纳任何组件 */}
         <APP>
-          <Admin>
-            <Switch>
-              <Route></Route>
-            </Switch>
-          </Admin>
+        <Route path='/admin' render={() =>
+            <Admin>
+              <Switch>
+                
+                <Route component={NoMatch}></Route>
+              </Switch>
+            </Admin>
+          }>
+          </Route>
         </APP>
       </Route>
     )
