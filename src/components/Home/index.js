@@ -1,21 +1,19 @@
 import React from 'react';
 import styled from './index.scss';
-import { Icon } from 'antd';
-import TodoItem from './TodoItem'
+import TodoItem from './components/TodoItem'
 
 class Home extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   getTodoItem() {
-    const { todoList } = this.props;
+    const { todoList, handleTodoClick, currentTodoType, getTodoListByTitle } = this.props;
     return (
       todoList.map((item, index) => (
-        <TodoItem 
-          key={item+index}
+        <TodoItem
+          currentTodoType={currentTodoType}
+          key={item.id}
           content={item}
-          index={index}
+          handleClick={handleTodoClick}
+          getTodoListByTitle={getTodoListByTitle}
         />
       ))
     )

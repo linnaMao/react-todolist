@@ -1,0 +1,103 @@
+.header {
+  background-color: #fff;
+  padding: 0 20px;
+  .title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    padding: 20px 0;
+    &.finished {
+      color: #777;
+      text-decoration: line-through;
+    }
+  }
+  
+  .add {
+    color: #436AF2;
+    padding-bottom: 15px;
+    .plus {
+      line-height: 28px;
+      padding-right: 10px;
+    }
+    .addStep {
+      border: none;
+      outline: none;
+      color: #6d6d6d;
+      &::placeholder {
+        color: #436AF2;
+      }
+    }
+  }
+}
+
+.addMyDay {
+  background: #fff;
+  margin: 10px;
+  margin-bottom: 0px;
+  border-radius: 5px;
+  padding: 10px;
+  &.added {
+    color: #436AF2;
+  }
+  span {
+    padding-left: 10px;
+  }
+}
+
+.remark {
+  padding: 10px;
+  textarea {
+    width: 100%;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    padding: 12px;
+    resize: none;
+    &::-webkit-scrollbar-track-piece { //滚动条凹槽的颜色，还可以设置边框属性
+    background-color:#f8f8f8;
+    border-radius: 2px;
+    }
+    &::-webkit-scrollbar {//滚动条的宽度
+    width:2px;
+    height:2px;
+    }
+    &::-webkit-scrollbar-thumb {//滚动条的设置
+    background-color:#dddddd;
+    background-clip:padding-box;
+    min-height:28px;
+    border-radius: 2px;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+    background-color:#bbb;
+    }
+  }
+}
+
+// todoStep
+.todoStep {
+  display: flex;
+  margin-bottom: 10px;
+  &:hover {
+    .close {
+      display: block;
+    }
+  }
+  .finish {
+    line-height: 27px;
+    padding-right: 10px;
+  }
+  .todoRight {
+    flex: 1;
+    border-bottom: 1px solid #f2f2f2;
+  }
+  .finished {
+    color: #bebebe;
+    text-decoration: line-through;
+  }
+  .close {
+    float: right;
+    font-size: 12px;
+    line-height: 27px;
+    display: none;
+  }
+}

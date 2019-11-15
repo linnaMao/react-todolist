@@ -1,83 +1,91 @@
 import React from 'react';
 import { Row, Col } from 'antd';
+import NavLeft from './components/NavLeft';
+import NavRight from './components/NavRight';
+import Header from './components/Header'
+import Footer from './components/Footer'
+import Home from './components/Home';
+
 import styled from './style/common.scss';
-import NavLeft from './components/navLeft';
-import NavRight from './components/navRight';
-import Header from './components/header'
-import Footer from './components/footer'
-import Home from './page/Home';
-import 'antd/dist/antd.css';
+import { getListByType } from './axios';
 
 class Admin extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      todoList:[],
-      value: ''
+      homeHeadTitle: '我的一天',
+      todoList: [],  // 中间的todos
+      checkedTodo: null, // 选中右边的todo
+      isShow: false
     }
   }
 
-  // componentDidMount() {
-  //   // 相等于调接口
-  //   this.getList()
-  // }
-
-  // getList = () => {
-  //   // 新增时首先获取已有的，如果没有，那就是个空数组
-  //   const lists = localStorage.getItem('todolist') || '[]';
-
-  //   localStorage.setItem("value", "")
-  //   const value = localStorage.getItem("value")
-    
-  //   // 转成json
-  //   const jsonList = JSON.parse(lists)
-
-  //   this.setState({
-  //     todoList: jsonList,
-  //     value
-  //   })
-  // }
-
-  handleChange = (e) => {
+  componentDidMount() {
+    const { homeHeadTitle } = this.state
+    const lists = getListByType(homeHeadTitle)
     this.setState({
-      value:e.target.value
+      todoList: lists
     })
   }
 
-  handlePress = (e) => {
-    const { todoList } = this.state
-    const { value } = this.state
-    if (e.nativeEvent.keyCode === 13 && value!=="") {
-      this.setState({
-        todoList: [...todoList, value],
-        value: ''
-      })
-      console.log(todoList)
-    }
+  // 点击左栏title
+  handleTitleClick = (title) => {
+    this.setState({
+      homeHeadTitle: title
+    })
+    // 根据title获取todolist
+    this.getTodoListByTitle(title)
+  }
+
+  // 根据title获取todolist
+  getTodoListByTitle = (title) => {
+    const lists =  getListByType(title)
+    this.setState({
+      todoList: lists
+    })
+  }
+
+  // 右栏显示
+  handleTodoClick = (todo) => {
+    this.setState((preState) => ({
+        checkedTodo: todo,
+        isShow: !preState.isShow
+      }))
   }
 
   render() {
-    const { todoList, value } = this.state
+    const { homeHeadTitle, todoList, checkedTodo, isShow } = this.state
     return (
       <div>
         <Row type="flex" className={styled.container}>
           <Col span={4} className={styled.navLeft}>
-            <NavLeft />
+            <NavLeft 
+              handleTitleClick={this.handleTitleClick}
+            />
           </Col>
-          <Col span={15} className={styled.main}>
-            <Header />
+          <Col 
+            span={isShow?15:20} 
+            className={styled.main}
+            >
+            <Header title={homeHeadTitle} />
             <Row className={styled.content}>
-              <Home value={value} todoList={todoList} />
-            </Row>
-            <Footer 
-              value={value} 
-              todoList={todoList} 
-              handleChange = {this.handleChange}
-              handlePress = {this.handlePress}
+              <Home
+                currentTodoType={homeHeadTitle}
+                todoList={todoList}
+                handleTodoClick={this.handleTodoClick}
+                getTodoListByTitle={this.getTodoListByTitle}
               />
+            </Row>
+            <Footer
+              currentTodoType={homeHeadTitle}
+              getTodoListByTitle={this.getTodoListByTitle}
+            />
           </Col>
-          <Col span={5} className={styled.navRight}>
-            <NavRight />
+          <Col span={isShow?5:0} className={styled.navRight} style={ isShow ? {display: 'block'} : {display: 'none'}}>
+            <NavRight 
+              checkedTodo={checkedTodo}
+              getTodoListByTitle={this.getTodoListByTitle}
+            />
           </Col>
         </Row>
       </div>

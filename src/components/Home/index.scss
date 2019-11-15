@@ -1,6 +1,7 @@
 .todoList {
   padding: 0;
   .list {
+    display: flex;
     height: 50px;
     line-height: 50px;
     width: 100%;
@@ -11,20 +12,38 @@
     margin-top: 2px;
     &:hover {
       opacity: 0.9;
+      .close {
+        display: block;
+      }
     }
     .star {
-      float: right;
-      height: 50px;
       line-height: 54px;
       color: #60acea;
       font-size: 18px;
     }
+    .close {
+      line-height: 51px;
+      color: #ccc;
+      font-size: 14px;
+      padding-left: 5px;
+      display: none;
+    }
     .finish {
-      font-size: 18px;
+      font-size: 16px;
       color: #60acea;
       line-height: 54px;
       padding-right: 10px;
     }
+    .content {
+      flex: 1;
+      color: #6d6d6d;
+      &.finished {
+        color: #bebebe;
+        text-decoration: line-through;
+      }
+    }
+    
+    
   }
 }
 

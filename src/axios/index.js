@@ -1,18 +1,8 @@
-import JsonP from 'jsonp';
+import { insertTodoServer, getListByTypeServer } from '../server'
+export function insertTodo (todo) {
+  insertTodoServer(todo)
+}
 
-export default class Axios {
-  static jsonp(options) {
-    return new Promise((resolve, reject) => {
-      JsonP(options.url, {
-        param:'callback'
-      }, function(err, response) {
-        if (response.status === 'success') {
-          resolve(response)
-          console.log(response)
-        } else {
-          reject(response.message)
-        }
-      })
-    })
-  }
+export function getListByType(type) {
+  return getListByTypeServer(type)
 }

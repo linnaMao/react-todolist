@@ -1,20 +1,16 @@
 import React from 'react';
 import styled from './index.scss';
-import { Menu, Avatar, Icon } from 'antd';
-import { NavLink } from 'react-router-dom';
+import { Menu } from 'antd';
 import NavConfig from '../../config/navConfig';
+import { IconFont } from '../common/common'
 
 const { SubMenu, Item } = Menu;
-const IconFont = Icon.createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_1505436_zu9876o8q68.js',
-});
 
 class NavLeft extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      navList:[],
-      navCreate: []
+      navList:[]
     }
   }
 
@@ -27,19 +23,15 @@ class NavLeft extends React.Component {
 
   // 菜单
   renderList = (data) => {
+    const { handleTitleClick } = this.props
+
     return data.map((item) => {
-      if (item.children) {
-        return (
-          <SubMenu title={item.title} key={item.key} >
-            { this.renderMenu(item.children) }
-          </SubMenu>
-        )
-      }
-      return <Item key={item.key}>
-        <IconFont type={item.icon}></IconFont>
-        {/* <NavLink to={item.key}>{item.title}</NavLink> */}
-        {item.title}
-      </Item>
+      return (
+        <Item onClick={() => handleTitleClick(item.title)} key={item.key}>
+          <IconFont type={item.icon} />
+          {item.title}
+        </Item>
+      )
     })
   };
 
@@ -48,22 +40,13 @@ class NavLeft extends React.Component {
     return (
       <div>
         <div className={styled.user}>
-          <Avatar icon="user" className={styled.userImg} ></Avatar>
+          <IconFont type="icon-account" className={styled.userImg} />
           <span className={styled.username}>毛某某</span>
-          <Icon type="search" className={styled.search} />
+          <IconFont type="icon-glass" className={styled.search} />
         </div>
-        <Menu theme="light">
+        <Menu defaultSelectedKeys="/admin/day" theme="light">
           {navList}
         </Menu>
-        {/* <div className={styled.hr}></div>
-        <div>
-          <ul>
-            <li>xixi</li>
-            <li>xixi</li>
-            <li>xixi</li>
-            <li>xixi</li>
-          </ul>
-        </div> */}
       </div>
     )
   }
