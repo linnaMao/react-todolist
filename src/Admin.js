@@ -23,6 +23,7 @@ class Admin extends React.Component {
   componentDidMount() {
     const { homeHeadTitle } = this.state
     const lists = getListByType(homeHeadTitle)
+    console.log(lists)
     this.setState({
       todoList: lists
     })
@@ -38,11 +39,17 @@ class Admin extends React.Component {
   }
 
   // 根据title获取todolist
-  getTodoListByTitle = (title) => {
+  getTodoListByTitle = (title, deleteId) => {
+    const { checkedTodo } = this.state
     const lists =  getListByType(title)
     this.setState({
       todoList: lists
     })
+    if(checkedTodo !== null && checkedTodo.id === deleteId) {
+      this.setState((preState) => ({
+        isShow: !preState.isShow
+      }))
+    }
   }
 
   // 右栏显示

@@ -1,18 +1,19 @@
 import React from 'react';
 import styled from '../index.scss';
 import { Icon } from 'antd';
-import { IconFont } from '../../common/common'
+import { IconFont } from '../../common/common';
+
+import { finished, star, deleteItem }  from '../../../axios'
 
 class TodoItem extends React.Component {
 
   // 点击完成
   handleFinishClick = () => {
     const { content, getTodoListByTitle, currentTodoType } = this.props
-    if(content.isFinish) {
-      // 调接口设置
-      // 刷新一下
-      // getTodoListByTitle()
-    }
+    // 调接口设置
+    finished(content.id)
+    // 刷新一下
+    getTodoListByTitle(currentTodoType)
   }
 
   // 右栏显示
@@ -24,18 +25,18 @@ class TodoItem extends React.Component {
 
   handleStarClick = () => {
     const { content, getTodoListByTitle, currentTodoType } = this.props
-    if(content.isStar) {
-      // 调接口设置
-      // 刷新一下
-      // getTodoListByTitle()
-    }
+    // 调接口设置
+    star(content.id)
+    // 刷新一下
+    getTodoListByTitle(currentTodoType)
   }
 
   handleDelete = () =>{
     const { content, getTodoListByTitle, currentTodoType } = this.props
     // 调接口设置
+    deleteItem(content.id)
     // 刷新一下
-    // getTodoListByTitle()
+    getTodoListByTitle(currentTodoType, content.id)
   }
 
   render() {

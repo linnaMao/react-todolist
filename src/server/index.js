@@ -20,3 +20,41 @@ export function getListByTypeServer(type) {
   const res = allTodo.filter(i => i.type === type)
   return res
 }
+
+export function finishedServer(id) {
+  const allTodo = getItem("todoItem")
+  const res = allTodo.map((item) => {
+    if (item.id === id) {
+      return {
+        ...item,
+        isFinish: !item.isFinish
+      }
+    }
+    return {...item}
+  })
+  setItem("todoItem", res)
+}
+
+export function starServer(id) {
+  const allTodo = getItem("todoItem")
+  const res = allTodo.map((item) => {
+    if (item.id === id) {
+      return {
+        ...item,
+        isStar: !item.isStar
+      }
+    }
+    return {...item}
+  })
+  setItem("todoItem", res)
+}
+
+export function deleteItemServer(id) {
+  const allTodo = getItem("todoItem")
+  const res = allTodo.filter((item) => {
+    return item.id !== id
+  })
+  setItem("todoItem", res)
+}
+
+
