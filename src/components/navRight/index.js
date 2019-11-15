@@ -2,23 +2,28 @@ import React from 'react';
 import styled from './index.scss';
 import TodoStep from './TodoStep'
 import { Icon } from 'antd';
-import { IconFont } from '../common/common'
+import { IconFont } from '../common/common';
+
+import { addMyDay, addRemark, addStep, deleteStep } from '../../axios/index' 
+import Step from '../../db/Entity/Step'
 
 class NavRight extends React.Component {
 
   constructor(props) {
     super(props)
-    console.log(props)
     this.state = {
       checkedTodo: props.checkedTodo,
       step: props.checkedTodo ? [...props.checkedTodo.step] : [],
-      value: ''
+      value: '',
+      remarkValue: props.checkedTodo ? props.checkedTodo.remark : ""
     }
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
       step: nextProps.checkedTodo ? [...nextProps.checkedTodo.step] : [],
+      checkedTodo: nextProps.checkedTodo,
+      remarkValue: nextProps.checkedTodo ? nextProps.checkedTodo.remark : ""
     })
   }
 
@@ -29,59 +34,74 @@ class NavRight extends React.Component {
     })
   }
 
+  //  获取备注值
+  handleRemarkChange = (e) => {
+    this.setState({
+      remarkValue: e.target.value
+    })
+  }
+
   // 点击enter键添加todo
   handleEnterClick = (e) => {
-    const { value } = this.state
+    const { value, step, checkedTodo } = this.state
+    const { getTodoListByTitle, currentTodoType } = this.props
     if (e.nativeEvent.keyCode === 13 && value !== "") {
       this.setState({
         step: [
-          ...this.state.step,
-          {
-            id: new Date().getTime(),
-            title: value,
-            createTime: new Date().getTime(),
-            isFinish: false,
-          }
+          ...step,
+          new Step(checkedTodo.id, value)
         ],
         value: ''
+      },() => {
+        //根据id查找
+        addStep(checkedTodo.id,this.state.step)
+        getTodoListByTitle(currentTodoType)
       })
     }
+    // 
   }
 
   // 删除todo
   handleClick = (index) => {
-    const { step } = this.state;
+    const { step, checkedTodo } = this.state;
+    const { getTodoListByTitle, currentTodoType } = this.props
     step.splice(index, 1);
     this.setState({
       step:[...step]
     })
+    deleteStep(checkedTodo.id, [...step])
+    getTodoListByTitle(currentTodoType)
   }
 
   // 添加到我的一天
   handleAddMyDay = () => {
-    const { getTodoListByTitle, checkedTodo } = this.props
-    if (checkedTodo.isAddToMyDay) {
-      // 修改数据库
-      // 刷新页面
-      getTodoListByTitle("我的一天")
-    } 
+    const { getTodoListByTitle, checkedTodo, currentTodoType } = this.props
+    // 修改数据库
+    addMyDay(checkedTodo.id)
+    // 刷新页面
+    getTodoListByTitle(currentTodoType, checkedTodo.id)
   }
 
   handleBlur = () => {
-    const { getTodoListByTitle, checkedTodo } = this.props
+    const { getTodoListByTitle, checkedTodo, currentTodoType } = this.props
     // 修改数据库
+    addRemark(checkedTodo.id, this.state.remarkValue)
     // 刷新页面
-    getTodoListByTitle()
+    getTodoListByTitle(currentTodoType)
   }
 
   getTodoItem() {
-    const { step } = this.state
+    const { step, checkedTodo } = this.state
+    const { currentTodoType, getTodoListByTitle } = this.props
     return (
       step.map((item, index) => (
         <TodoStep
           key={item.id}
           content={item}
           handleClick={() => this.handleClick(index)}
+          checkedTodo={checkedTodo}
+          getTodoListByTitle={getTodoListByTitle}
+          currentTodoType={currentTodoType}
         />
       ))
     )
@@ -89,7 +109,7 @@ class NavRight extends React.Component {
 
   render() {
     const { checkedTodo } = this.props
-    const { value } = this.state
+    const { value, remarkValue } = this.state
     if (checkedTodo === null) {
       return <div></div>
     }
@@ -110,17 +130,21 @@ class NavRight extends React.Component {
               onChange={this.handleChange} />
           </div>
         </div>
-        <div className={`${styled.addMyDay} ${checkedTodo.isAddToMyDay ? styled.added : ''}`} onClick={this.handleAddMyDay}>
-          <IconFont type="icon-taiyang" />
-          <span>{ checkedTodo.isAddToMyDay ? '已添加到"我的一天"': '添加到"我的一天"'}</span>
-        </div>
+        {
+          checkedTodo.type !== "我的一天" &&
+          <div className={styled.addMyDay} onClick={this.handleAddMyDay}>
+            <IconFont type="icon-taiyang" />
+            <span>添加到"我的一天"</span>
+          </div>
+        }
         <div className={styled.remark}>
           <textarea 
             rows="20" 
             placeholder="添加备注" 
-            defaultValue={checkedTodo.remark}
             onBlur={this.handleBlur}
-            />
+            value={remarkValue}
+            onChange={this.handleRemarkChange}
+          />
         </div>
       </div>
     )

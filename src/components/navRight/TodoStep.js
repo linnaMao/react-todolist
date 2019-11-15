@@ -1,7 +1,8 @@
 import React from 'react';
 import { Icon } from 'antd';
 import styled from './index.scss';
-import { IconFont } from '../common/common'
+import { IconFont } from '../common/common';
+import { stepFinish } from '../../axios'
 
 class TodoStep extends React.Component {
   constructor(props) {
@@ -11,18 +12,22 @@ class TodoStep extends React.Component {
     }
   }
 
-  // 删除todo
+  // 删除step
   handleCloseClick = () => {
     const { handleClick, index } = this.props
     handleClick(index)
   }
 
-  // 是否完成todo
+  // 是否完成step
   handleFinishClick = () => {
     const { isFinish } = this.state
+    const { checkedTodo, content, getTodoListByTitle, currentTodoType } = this.props
+    // 获取todo的id和step的id
+    stepFinish(checkedTodo.id, content.id)
     this.setState({
       isFinish: !isFinish
     })
+    getTodoListByTitle(currentTodoType)
   }
 
   render() {

@@ -5,9 +5,9 @@ export default class Todo {
     this.createTime = new Date().getTime()
     this.isFinish = false
     this.isStar = false
-    this.isAddToMyDay = false
     this.remark = ''
     this.step = []
     this.type = type
   }
 }
+

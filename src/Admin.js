@@ -32,20 +32,22 @@ class Admin extends React.Component {
   // 点击左栏title
   handleTitleClick = (title) => {
     this.setState({
-      homeHeadTitle: title
+      homeHeadTitle: title,
+      isShow: false
     })
     // 根据title获取todolist
     this.getTodoListByTitle(title)
   }
 
   // 根据title获取todolist
-  getTodoListByTitle = (title, deleteId) => {
+  getTodoListByTitle = (title, id) => {
     const { checkedTodo } = this.state
     const lists =  getListByType(title)
     this.setState({
-      todoList: lists
+      todoList: lists,
+      checkedTodo: checkedTodo && lists.find(i => i.id === checkedTodo.id)
     })
-    if(checkedTodo !== null && checkedTodo.id === deleteId) {
+    if(checkedTodo !== null && checkedTodo.id === id) {
       this.setState((preState) => ({
         isShow: !preState.isShow
       }))
@@ -92,6 +94,7 @@ class Admin extends React.Component {
             <NavRight 
               checkedTodo={checkedTodo}
               getTodoListByTitle={this.getTodoListByTitle}
+              currentTodoType={homeHeadTitle}
             />
           </Col>
         </Row>

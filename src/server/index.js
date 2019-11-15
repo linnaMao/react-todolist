@@ -57,4 +57,82 @@ export function deleteItemServer(id) {
   setItem("todoItem", res)
 }
 
+export function addMyDayServer(id) {
+  const allTodo = getItem("todoItem")
+  const res = allTodo.map((item) => {
+    if (item.id === id) {
+      return {
+        ...item,
+        type: "我的一天"
+      }
+    }
+    return {...item}
+  })
+  setItem("todoItem", res)
+}
+
+export function addRemarkServer(id, value) {
+  const allTodo = getItem("todoItem")
+  const res = allTodo.map((item) => {
+    if(item.id === id) {
+      return {
+        ...item,
+        remark: value
+      }
+    }
+    return {...item}
+  })
+  setItem("todoItem", res)
+}
+
+export function addStepServer(id, step) {
+  const allTodo = getItem("todoItem")
+  const res = allTodo.map((item) => {
+    if(item.id === id) {
+      return {
+        ...item,
+        step
+      }
+    }
+    return {...item}
+  })
+  setItem("todoItem", res)
+}
+
+export function deleteStepServer(id, step) {
+  const allTodo = getItem("todoItem")
+  const res = allTodo.map((item) => {
+    if(item.id === id) {
+      return {
+        ...item,
+        step
+      }
+    }
+    return {...item}
+  })
+  setItem("todoItem", res)
+}
+
+export function stepFinishServer(todoId, stepId) {
+  const allTodo = getItem("todoItem")
+  const todoRes = allTodo.map((item) => {
+    if (item.id === todoId) {
+      return {
+        ...item,
+        step:item.step.map((item) => {
+          if (item.id === stepId) {
+            return {
+              ...item,
+              isFinish: !item.isFinish
+            }
+          }
+          return {...item}
+        })
+      }
+    }
+    return {...item}
+  })
+
+  setItem("todoItem", todoRes)
+}
 
