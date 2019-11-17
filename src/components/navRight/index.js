@@ -1,11 +1,17 @@
 import React from 'react';
 import styled from './index.scss';
-import TodoStep from './TodoStep'
+import TodoStep from './TodoStep';
+import Step from '../../db/Entity/Step';
 import { Icon } from 'antd';
 import { IconFont } from '../common/common';
+import { 
+  addMyDay, 
+  addRemark, 
+  addStep, 
+  deleteStep, 
+  stepFinish 
+} from '../../axios/index' 
 
-import { addMyDay, addRemark, addStep, deleteStep } from '../../axios/index' 
-import Step from '../../db/Entity/Step'
 
 class NavRight extends React.Component {
 
@@ -61,6 +67,14 @@ class NavRight extends React.Component {
     // 
   }
 
+  // 点击完成todo
+  handleFinishClick = (content) => {
+    const { checkedTodo, getTodoListByTitle, currentTodoType } = this.props
+    // 获取todo的id和step的id
+    stepFinish(checkedTodo.id, content.id)
+    getTodoListByTitle(currentTodoType)
+  }
+
   // 删除todo
   handleClick = (index) => {
     const { step, checkedTodo } = this.state;
@@ -82,6 +96,7 @@ class NavRight extends React.Component {
     getTodoListByTitle(currentTodoType, checkedTodo.id)
   }
 
+  // 跳出备注区域
   handleBlur = () => {
     const { getTodoListByTitle, checkedTodo, currentTodoType } = this.props
     // 修改数据库
@@ -102,6 +117,7 @@ class NavRight extends React.Component {
           checkedTodo={checkedTodo}
           getTodoListByTitle={getTodoListByTitle}
           currentTodoType={currentTodoType}
+          handleFinishClick={this.handleFinishClick}
         />
       ))
     )

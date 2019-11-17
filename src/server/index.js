@@ -114,6 +114,7 @@ export function deleteStepServer(id, step) {
 }
 
 export function stepFinishServer(todoId, stepId) {
+  console.log(todoId, stepId)
   const allTodo = getItem("todoItem")
   const todoRes = allTodo.map((item) => {
     if (item.id === todoId) {
