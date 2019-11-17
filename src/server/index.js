@@ -27,7 +27,7 @@ export function finishedServer(id) {
     if (item.id === id) {
       return {
         ...item,
-        isFinish: !item.isFinish
+        isFinish: false
       }
     }
     return {...item}

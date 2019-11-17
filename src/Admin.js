@@ -47,7 +47,7 @@ class Admin extends React.Component {
       todoList: lists,
       checkedTodo: checkedTodo && lists.find(i => i.id === checkedTodo.id)
     })
-    if(checkedTodo !== null && checkedTodo.id === id) {
+    if(checkedTodo && checkedTodo.id === id) {
       this.setState((preState) => ({
         isShow: !preState.isShow
       }))
