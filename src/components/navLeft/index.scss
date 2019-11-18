@@ -1,19 +1,9 @@
-
-.hr {
-  border-top: 1px solid #ccc;
-  margin: 0 10px;
-}
-
-.user {
+.leftTitle {
   padding: 16px;
   .username {
-    height: 32px;
-    line-height: 32px;
     padding: 0 10px;
   }
   .search {
     float: right;
-    height: 32px;
-    line-height: 32px;
   }
 }

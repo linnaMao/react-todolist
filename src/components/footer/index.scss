@@ -1,24 +1,21 @@
-.footer {
+.itemFooter {
   position: absolute;
-  bottom: 30px;
+  width: 95%;
   height: 60px;
   line-height: 60px;
-  left: 0;
-  right: 0;
-  margin: 0 25px;
-  background-color: #2f90e8;
-  padding: 0 20px;
   border-radius: 5px;
-  color: #fff;
-  .add {
-    padding-left: 10px;
-    background-color: #2f90e8;
+  padding: 0 20px;
+  background-color: #44a2ef;
+  bottom: 30px;
+  input {
     width: 95%;
-    height: 100%;
+    line-height: 60px;
     border: none;
     outline: none;
+    padding: 0 10px;
+    background-color: #44a2ef;
     &::placeholder {
-      color: #fff;
+      color: #333;
     }
   }
-} 
+}

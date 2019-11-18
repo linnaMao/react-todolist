@@ -1,0 +1,17 @@
+* {
+  color: #333;
+  list-style: none;
+  padding: none;
+}
+.navLeft {
+  height: calc(100vh);
+}
+
+.container {
+  background-color: #67b2f0;
+  height: calc(100vh);
+  padding: 30px !important;
+  .home {
+    overflow: auto;
+  }
+}

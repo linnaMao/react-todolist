@@ -1,51 +1,50 @@
 import React from 'react';
 import styled from './index.scss';
+import IconFont from '../IconFont';
+import navConfig from '../../config/navConfig'
 import { Menu } from 'antd';
-import NavConfig from '../../config/navConfig';
-import { IconFont } from '../common/common'
 
-const { SubMenu, Item } = Menu;
+const { Item } = Menu
 
 class NavLeft extends React.Component {
+
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      navList:[]
+      menuList: []
     }
   }
 
   componentDidMount() {
-    const menuTree =  this.renderList(NavConfig)
+    const menuList = this.listItem(navConfig)
     this.setState({
-      navList: menuTree
+      menuList
     })
-  };
+  }
 
-  // 菜单
-  renderList = (data) => {
-    const { handleTitleClick } = this.props
-
-    return data.map((item) => {
-      return (
-        <Item onClick={() => handleTitleClick(item.title)} key={item.key}>
-          <IconFont type={item.icon} />
-          {item.title}
-        </Item>
-      )
-    })
-  };
+  // 列出菜单
+  listItem = (navList) => {
+    return navList.map((item) => (
+      <Item key={item.key}>
+        <IconFont type={item.icon} />
+        {item.title}
+      </Item>
+    ))
+  }
 
   render() {
-    const { navList } = this.state
+    const  { menuList } = this.state
     return (
       <div>
-        <div className={styled.user}>
-          <IconFont type="icon-account" className={styled.userImg} />
-          <span className={styled.username}>毛某某</span>
+        <div className={styled.leftTitle}>
+          <IconFont type="icon-account" />
+          <span className={styled.username}>毛栗子</span>
           <IconFont type="icon-glass" className={styled.search} />
         </div>
-        <Menu defaultSelectedKeys="/admin/day" theme="light">
-          {navList}
+        <Menu 
+          defaultSelectedKeys="/admin/day"
+        >
+          {menuList}
         </Menu>
       </div>
     )
