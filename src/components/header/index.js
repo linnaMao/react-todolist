@@ -3,9 +3,10 @@ import styled from './index.scss'
 
 class Header extends React.Component {
   render() {
+    const { homeTitle } = this.props
     return (
       <div className={styled.homeTitle}>
-        <h1>我的一天</h1>
+        <h1>{homeTitle}</h1>
       </div>
     )
   }

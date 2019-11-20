@@ -1,0 +1,15 @@
+.addStepAll {
+  background-color: #fff;
+  padding: 10px;
+}
+
+.addStep {
+  input {
+    outline: none;
+    border: none;
+    width: 100%;
+    &::placeholder {
+      color: #ccc;
+    }
+  }
+}

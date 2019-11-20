@@ -22,10 +22,16 @@ class NavLeft extends React.Component {
     })
   }
 
+  // 获取左侧title
+  handleLeftTitle = (title) => {
+    const { handleLeftTitle } = this.props
+    handleLeftTitle(title)
+  }
+
   // 列出菜单
   listItem = (navList) => {
     return navList.map((item) => (
-      <Item key={item.key}>
+      <Item key={item.key} onClick={() => this.handleLeftTitle(item.title)}>
         <IconFont type={item.icon} />
         {item.title}
       </Item>
