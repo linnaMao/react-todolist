@@ -1,18 +1,23 @@
 import React from 'react';
-import IconFont from '../../../IconFont';
 import styled from './index.scss';
 import StepItem from './components/StepItem';
-import Step from '../../../../db1/Entity/Step';
+import Step from '../../db1/Entity/Step';
 
-import { insertStep, stepFinish } from '../../../../axios1'
+import { insertStep, stepFinish } from '../../axios1'
 
-class NavRight extends React.Component {
+class DrawerContent extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       step: props.checkedTodo?[...props.checkedTodo.step]:[],
       value: ""
     }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      step: nextProps.checkedTodo?[...nextProps.checkedTodo.step]:[]
+    })
   }
 
   getStepItem = () => {
@@ -44,10 +49,7 @@ class NavRight extends React.Component {
         ],
         value: ""
       }, () => {
-        insertStep(checkedTodo.id, [
-          ...step,
-          new Step(checkedTodo.id, value)
-        ])
+        insertStep(checkedTodo.id, step)
         // 更新页面
         getTodoListByType(currentType)
       })
@@ -79,4 +81,4 @@ class NavRight extends React.Component {
   }
 }
 
-export default NavRight
+export default DrawerContent

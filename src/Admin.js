@@ -1,10 +1,11 @@
 import React from 'react';
 import NavLeft from './components/NavLeft';
-import Home from './components/Home';
-import Header from './components/Header'
+import TodoItem from './components/TodoItem';
+import DrawerContent from './components/DrawerContent';
+import Header from './components/Header';
 import Footer from './components/Footer';
 import styled from './Admin.scss';
-import { Col, Row } from 'antd';
+import { Col, Row, Drawer } from 'antd';
 
 import { getListByType } from './axios1'
 
@@ -14,17 +15,33 @@ class Admin extends React.Component {
     this.state = {
       todoList: [], //所有的todo
       checkedTodo:null, //右栏todo
-      homeTitle: "我的一天" //title
+      homeTitle: "我的一天", //title
+      visible: false,
+      rightTitle: ""
     }
   }
 
   componentDidMount() {
     const { homeTitle } = this.state
     const lists = getListByType(homeTitle)
-    console.log(lists)
     this.setState({
       todoList: lists
     })
+  }
+
+  // 获取todo
+  getTodoItem = () => {
+    const { todoList, homeTitle } = this.state
+    return todoList.map((item, index) => (
+      <TodoItem 
+        key={index}
+        content={item}
+        handleRightShow={this.handleRightShow}
+        handleRightTodo={this.handleRightTodo}
+        getTodoListByType={this.getTodoListByType}
+        currentType={homeTitle}
+      />
+    ))
   }
 
   // 获取左栏title
@@ -45,15 +62,22 @@ class Admin extends React.Component {
     })
   }
 
-  // 获取右栏todo
-  handleRightTodo = (todo) => {
+  handleRightClose = () => {
     this.setState({
-      checkedTodo: todo
+      visible: false
+    });
+  };
+
+  handleRightShow = (content) => {
+    this.setState({
+      visible: true,
+      rightTitle: content.title,
+      checkedTodo: content
     })
   }
 
   render() {
-    const { todoList, homeTitle, checkedTodo } = this.state
+    const { homeTitle, checkedTodo, rightTitle } = this.state
     return (
       <div>
         <Row>
@@ -62,16 +86,23 @@ class Admin extends React.Component {
               handleLeftTitle={this.handleLeftTitle}
             />
           </Col>
-          <Col span={20} className={styled.home} className={styled.container}>
+          <Col span={20} className={styled.container}>
             <Header homeTitle={homeTitle} />
             <Row>
-              <Home 
-                todoList={todoList}
-                currentType={homeTitle}
-                getTodoListByType={this.getTodoListByType}
-                handleRightTodo={this.handleRightTodo}
-                checkedTodo={checkedTodo}
-              />
+              {this.getTodoItem()}
+              <Drawer
+                title={rightTitle}
+                placement="right"
+                closable={false}
+                onClose={this.handleRightClose}
+                visible={this.state.visible}
+              >
+                <DrawerContent 
+                  checkedTodo={checkedTodo}
+                  getTodoListByType={this.getTodoListByType}
+                  currentType={homeTitle}
+                />
+              </Drawer>
             </Row>
             <Footer 
               currentType={homeTitle}

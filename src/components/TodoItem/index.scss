@@ -1,12 +1,4 @@
-.homeList {
-  .itemFinish {
-    padding-right: 10px;
-  }
-  .itemStar {
-    float: right;
-    line-height: 50px;
-  }
-  .homeListItem {
+.homeListItem {
     width: 100%;
     height: 50px;
     line-height: 50px;
@@ -18,7 +10,13 @@
       display: inline-block;
       width: 95%;
     }
+    .itemStar {
+      float: right;
+      line-height: 50px;
+    }
+    .itemFinish {
+      padding-right: 10px;
+    }
   }
-}
 
 

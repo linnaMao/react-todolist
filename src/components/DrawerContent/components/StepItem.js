@@ -1,5 +1,5 @@
 import React from 'react';
-import IconFont from '../../../../IconFont'
+import IconFont from '../../IconFont'
 
 class StepItem extends React.Component {
 
