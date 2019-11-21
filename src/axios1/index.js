@@ -2,7 +2,9 @@ import {
   insertTodoServer, 
   getListByTypeServer, 
   finishedServer,
-  starServer
+  starServer,
+  insertStepServer,
+  stepFinishServer
 } from '../server1';
 
 export function insertTodo(todo) {
@@ -19,4 +21,12 @@ export function finished(id) {
 
 export function star(id) {
   return starServer(id)
+}
+
+export function insertStep(id,step) {
+  return insertStepServer(id,step)
+}
+
+export function stepFinish(todoId, stepId) {
+  stepFinishServer(todoId, stepId)
 }

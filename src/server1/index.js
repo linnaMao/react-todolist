@@ -52,3 +52,40 @@ export function starServer(id) {
   })
   setItem("todoItem", res)
 }
+
+export function insertStepServer(id,step) {
+  const allTodo = getItem("todoItem")
+  const res = allTodo.map((item) => {
+    if (item.id === id) {
+      return {
+        ...item,
+        step
+      }
+    }
+    return {...item}
+  })
+  setItem("todoItem", res)
+  console.log(res)
+}
+
+export function stepFinishServer(todoId, stepId) {
+  const allTodo = getItem("todoItem")
+  const res = allTodo.map((item) => {
+    if (item.id === todoId) {
+      return {
+        ...item,
+        step: item.step.map((item) => {
+          if (item.id === stepId) {
+            return {
+              ...item,
+              isFinish: !item.isFinish
+            }
+          }
+          return {...item}
+        })
+      }
+    }
+    return {...item}
+  })
+  setItem("todoItem", res)
+}

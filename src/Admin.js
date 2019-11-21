@@ -8,14 +8,12 @@ import { Col, Row } from 'antd';
 
 import { getListByType } from './axios1'
 
-
-
 class Admin extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       todoList: [], //所有的todo
-      checkTodo:null, //每个title的不同todo
+      checkedTodo:null, //右栏todo
       homeTitle: "我的一天" //title
     }
   }
@@ -39,16 +37,23 @@ class Admin extends React.Component {
 
   // 获取相应页面的todo
   getTodoListByType = (title) => {
-    const { checkTodo } = this.state
+    const { checkedTodo } = this.state
     const lists = getListByType(title)
     this.setState({
       todoList: lists,
-      checkTodo: checkTodo && lists.find(i => i.id === checkTodo.id)
+      checkedTodo: checkedTodo && lists.find(i => i.id === checkedTodo.id)
+    })
+  }
+
+  // 获取右栏todo
+  handleRightTodo = (todo) => {
+    this.setState({
+      checkedTodo: todo
     })
   }
 
   render() {
-    const { todoList, homeTitle } = this.state
+    const { todoList, homeTitle, checkedTodo } = this.state
     return (
       <div>
         <Row>
@@ -64,6 +69,8 @@ class Admin extends React.Component {
                 todoList={todoList}
                 currentType={homeTitle}
                 getTodoListByType={this.getTodoListByType}
+                handleRightTodo={this.handleRightTodo}
+                checkedTodo={checkedTodo}
               />
             </Row>
             <Footer 
