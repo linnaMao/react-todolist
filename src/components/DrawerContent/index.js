@@ -20,6 +20,14 @@ class DrawerContent extends React.Component {
     })
   }
 
+
+  handleChange = (e) => {
+    this.setState({
+      value: e.target.value
+    })
+  }
+
+  // 获取todo
   getStepItem = () => {
     const { step } = this.state
     return step.map((item) => {
@@ -31,12 +39,7 @@ class DrawerContent extends React.Component {
     })
   }
 
-  handleChange = (e) => {
-    this.setState({
-      value: e.target.value
-    })
-  }
-
+  // 点击enter添加
   handleEnterStep = (e) => {
     const {  value, step } = this.state
     const { checkedTodo,currentType, getTodoListByType } = this.props
@@ -49,13 +52,17 @@ class DrawerContent extends React.Component {
         ],
         value: ""
       }, () => {
-        insertStep(checkedTodo.id, step)
+        insertStep(checkedTodo.id, [
+          ...step,
+          new Step(checkedTodo.id, value)
+        ])
         // 更新页面
         getTodoListByType(currentType)
       })
     }
   }
 
+  // finish按钮完成
   handleFinishClick = (stepId) => {
     const { checkedTodo,currentType, getTodoListByType } = this.props
     stepFinish(checkedTodo.id, stepId)

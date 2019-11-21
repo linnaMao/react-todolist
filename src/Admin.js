@@ -62,12 +62,14 @@ class Admin extends React.Component {
     })
   }
 
+  // 右栏关闭
   handleRightClose = () => {
     this.setState({
       visible: false
     });
   };
 
+  // 获取点击item以及右栏开启
   handleRightShow = (content) => {
     this.setState({
       visible: true,
@@ -96,6 +98,11 @@ class Admin extends React.Component {
                 closable={false}
                 onClose={this.handleRightClose}
                 visible={this.state.visible}
+                bodyStyle={{
+                  padding: "0px",
+                  backgroundColor: "#eaeaea",
+                  height: "calc(100vh)"
+                }}
               >
                 <DrawerContent 
                   checkedTodo={checkedTodo}

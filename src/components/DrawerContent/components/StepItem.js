@@ -1,5 +1,6 @@
 import React from 'react';
-import IconFont from '../../IconFont'
+import IconFont from '../../IconFont';
+import styled from '../index.scss'
 
 class StepItem extends React.Component {
 
@@ -11,12 +12,13 @@ class StepItem extends React.Component {
   render() {
     const { content } = this.props
     return (
-      <div>
+      <div className={styled.children}>
         <IconFont 
+          className={styled.childrenFinish}
           type={content.isFinish?"icon-yiwancheng":"icon-weiwancheng"}
           onClick={this.handleFinishClick}  
         />
-        <span>{content.title}</span>
+        <div className={styled.childrenStep}>{content.title}</div>
       </div>
     )
   }

@@ -13,3 +13,18 @@
     }
   }
 }
+
+.children {
+  padding-bottom: 10px;
+  .childrenStep {
+    display: inline-block;
+    width: 90%;
+    border-bottom: 1px solid #ececec;
+    padding-bottom: 2px;
+  }
+  
+  .childrenFinish {
+    padding-right: 5px;
+  }
+}
+
