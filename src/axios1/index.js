@@ -4,7 +4,8 @@ import {
   finishedServer,
   starServer,
   insertStepServer,
-  stepFinishServer
+  stepFinishServer,
+  changeContentServer
 } from '../server1';
 
 export function insertTodo(todo) {
@@ -29,4 +30,8 @@ export function insertStep(id,step) {
 
 export function stepFinish(todoId, stepId) {
   stepFinishServer(todoId, stepId)
+}
+
+export function changeContent(todoId, stepId, value) {
+  changeContentServer(todoId, stepId, value)
 }

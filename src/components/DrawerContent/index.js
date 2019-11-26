@@ -3,7 +3,7 @@ import styled from './index.scss';
 import StepItem from './components/StepItem';
 import Step from '../../db1/Entity/Step';
 
-import { insertStep, stepFinish } from '../../axios1'
+import { insertStep, stepFinish, changeContent } from '../../axios1'
 
 class DrawerContent extends React.Component {
   constructor(props) {
@@ -35,8 +35,18 @@ class DrawerContent extends React.Component {
         key={item.id}
         content={item}
         handleFinishClick={this.handleFinishClick}
+        handleModifyStep={this.handleModifyStep}
       />
     })
+  }
+
+  // 点击改变step的值
+  handleModifyStep = (stepId, value) => {
+    const { checkedTodo,currentType, getTodoListByType } = this.props
+    // 改变content里的title的值
+    changeContent(checkedTodo.id, stepId, value)
+    // 更新页面
+    getTodoListByType(currentType)
   }
 
   // 点击enter添加
