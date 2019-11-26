@@ -4,7 +4,7 @@ import { Menu } from 'antd';
 import NavConfig from '../../config/navConfig';
 import { IconFont } from '../Iconfont'
 
-const { SubMenu, Item } = Menu;
+const { Item } = Menu;
 
 class NavLeft extends React.Component {
   constructor(props) {

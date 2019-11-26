@@ -6,7 +6,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import TodoItem from './components/TodoItem'
 
-import styled from './style/common.scss';
+import styled from './Admin.scss';
 import { getListByType } from './axios';
 
 class Admin extends React.Component {
