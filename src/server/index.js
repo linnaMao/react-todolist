@@ -137,3 +137,24 @@ export function stepFinishServer(todoId, stepId) {
   setItem("todoItem", todoRes)
 }
 
+export function modifyStepServer(todoId, stepId, value) {
+  const allTodo = getItem("todoItem")
+  const res = allTodo.map((item) => {
+    if (item.id === todoId) {
+      return {
+        ...item,
+        step: item.step.map((item) => {
+          if (item.id === stepId) {
+            return {
+              ...item,
+              title: value
+            }
+          }
+          return {...item}
+        })
+      }
+    }
+    return {...item}
+  })
+  setItem("todoItem", res)
+}

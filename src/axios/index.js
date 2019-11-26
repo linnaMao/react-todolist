@@ -8,7 +8,8 @@ import {
   addRemarkServer,
   addStepServer,
   deleteStepServer,
-  stepFinishServer
+  stepFinishServer,
+  modifyStepServer
 } from '../server'
 export function insertTodo (todo) {
   return insertTodoServer(todo)
@@ -48,4 +49,8 @@ export function deleteStep(id, step) {
 
 export function stepFinish(todoId, stepId) {
   return stepFinishServer(todoId, stepId)
+}
+
+export function modifyStep(todoId, stepId, value) {
+  return modifyStepServer(todoId, stepId, value)
 }

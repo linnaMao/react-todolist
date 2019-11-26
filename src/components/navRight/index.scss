@@ -9,6 +9,8 @@
     &.finished {
       color: #777;
       text-decoration: line-through;
+      border: none;
+      outline: none;
     }
   }
   
@@ -90,6 +92,11 @@
   .todoRight {
     flex: 1;
     border-bottom: 1px solid #f2f2f2;
+    .rightStep {
+      border: none;
+      outline: none;
+      width: 95%
+    }
   }
   .finished {
     color: #bebebe;

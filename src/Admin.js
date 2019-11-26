@@ -2,8 +2,8 @@ import React from 'react';
 import { Row, Col } from 'antd';
 import NavLeft from './components/NavLeft';
 import NavRight from './components/NavRight';
-import Header from './components/Header'
-import Footer from './components/Footer'
+import Header from './components/Header';
+import Footer from './components/Footer';
 import Home from './components/Home';
 
 import styled from './style/common.scss';

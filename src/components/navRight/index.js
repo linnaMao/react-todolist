@@ -9,7 +9,8 @@ import {
   addRemark, 
   addStep, 
   deleteStep, 
-  stepFinish 
+  stepFinish,
+  modifyStep
 } from '../../axios/index' 
 
 
@@ -64,7 +65,6 @@ class NavRight extends React.Component {
         getTodoListByTitle(currentTodoType)
       })
     }
-    // 
   }
 
   // 点击完成todo
@@ -105,19 +105,25 @@ class NavRight extends React.Component {
     getTodoListByTitle(currentTodoType)
   }
 
+  // 修改step内容
+  handleModifyStep = (stepId, value) => {
+    const { getTodoListByTitle, checkedTodo, currentTodoType } = this.props
+    // 更改数据库
+    modifyStep(checkedTodo.id, stepId, value)
+    // 更新页面
+    getTodoListByTitle(currentTodoType)
+  }
+
   getTodoItem() {
-    const { step, checkedTodo } = this.state
-    const { currentTodoType, getTodoListByTitle } = this.props
+    const { step } = this.state
     return (
       step.map((item, index) => (
         <TodoStep
           key={item.id}
           content={item}
           handleClick={() => this.handleClick(index)}
-          checkedTodo={checkedTodo}
-          getTodoListByTitle={getTodoListByTitle}
-          currentTodoType={currentTodoType}
           handleFinishClick={this.handleFinishClick}
+          handleModifyStep={this.handleModifyStep}
         />
       ))
     )
