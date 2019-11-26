@@ -10,8 +10,6 @@ class TodoStep extends React.Component {
     this.state = {
       value: props.content.title
     }
-    // 创建一个ref来存储textBlur中的Dom元素
-    this.textBlur = React.createRef();
   }
 
   handleChangeStep = (e) => {
@@ -32,8 +30,6 @@ class TodoStep extends React.Component {
     const { content, handleModifyStep } = this.props
     if (e.nativeEvent.keyCode === 13 && value !== "")  {
       handleModifyStep(content.id, value)
-      // 通过current来访问DOM节点
-      this.textBlur.current.blur()
     } else if(value === "") {
       alert('内容不能为空')
       this.setState({
@@ -61,14 +57,12 @@ class TodoStep extends React.Component {
           onClick={this.handleFinishClick} 
           />
         <div className={styled.todoRight}>
-          {/* 将input中ref关联到构造器里创建的textBlur上 */}
           <input 
             className={`${styled.rightStep} ${content.isFinish?styled.finished:''}`} 
             type="text"
             value={value}
             onChange={this.handleChangeStep}
             onKeyPress={this.handleModifyStep}
-            ref={this.textBlur}
           />
           <Icon 
             className={styled.close} 

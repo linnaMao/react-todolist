@@ -10,7 +10,8 @@ import {
   addStep, 
   deleteStep, 
   stepFinish,
-  modifyStep
+  modifyStep,
+  modifyTitle
 } from '../../axios/index' 
 
 
@@ -21,23 +22,27 @@ class NavRight extends React.Component {
     this.state = {
       checkedTodo: props.checkedTodo,
       step: props.checkedTodo ? [...props.checkedTodo.step] : [],
-      value: '',
-      remarkValue: props.checkedTodo ? props.checkedTodo.remark : ""
+      stepValue: '',
+      remarkValue: props.checkedTodo ? props.checkedTodo.remark : "",
+      titleValue: props.checkedTodo ? props.checkedTodo.title : ""
     }
+    // 创建一个ref来存储textFocus中的Dom元素
+    this.textFocus = React.createRef()
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
       step: nextProps.checkedTodo ? [...nextProps.checkedTodo.step] : [],
       checkedTodo: nextProps.checkedTodo,
-      remarkValue: nextProps.checkedTodo ? nextProps.checkedTodo.remark : ""
+      remarkValue: nextProps.checkedTodo ? nextProps.checkedTodo.remark : "",
+      titleValue: nextProps.checkedTodo ? nextProps.checkedTodo.title : ""
     })
   }
 
-  // 获取value值
-  handleChange = (e) => {
+  // 获取step值
+  handleStepChange = (e) => {
     this.setState({
-      value: e.target.value
+      stepValue: e.target.value
     })
   }
 
@@ -48,17 +53,24 @@ class NavRight extends React.Component {
     })
   }
 
+  // 获取title值
+  handleTitleChange = (e) => {
+    this.setState({
+      titleValue: e.target.value
+    })
+  }
+
   // 点击enter键添加todo
   handleEnterClick = (e) => {
-    const { value, step, checkedTodo } = this.state
+    const { stepValue, step, checkedTodo } = this.state
     const { getTodoListByTitle, currentTodoType } = this.props
-    if (e.nativeEvent.keyCode === 13 && value !== "") {
+    if (e.nativeEvent.keyCode === 13 && stepValue !== "") {
       this.setState({
         step: [
           ...step,
-          new Step(checkedTodo.id, value)
+          new Step(checkedTodo.id, stepValue)
         ],
-        value: ''
+        stepValue: ''
       },() => {
         //根据id查找
         addStep(checkedTodo.id,this.state.step)
@@ -105,11 +117,26 @@ class NavRight extends React.Component {
     getTodoListByTitle(currentTodoType)
   }
 
+  // 修改标题
+  handleModifyTitle = (e) => {
+    const { titleValue, checkedTodo } = this.state
+    const { getTodoListByTitle, currentTodoType } = this.props
+    if (e.nativeEvent.keyCode === 13 && titleValue !== "") {
+      // 更改数据库
+      modifyTitle(checkedTodo.id, titleValue)
+      // 更新页面
+      getTodoListByTitle(currentTodoType)
+      this.textFocus.current.focus()
+    }
+  }
+
   // 修改step内容
   handleModifyStep = (stepId, value) => {
     const { getTodoListByTitle, checkedTodo, currentTodoType } = this.props
     // 更改数据库
     modifyStep(checkedTodo.id, stepId, value)
+    // 通过current来访问DOM节点
+    this.textFocus.current.focus()
     // 更新页面
     getTodoListByTitle(currentTodoType)
   }
@@ -131,7 +158,7 @@ class NavRight extends React.Component {
 
   render() {
     const { checkedTodo } = this.props
-    const { value, remarkValue } = this.state
+    const { stepValue, remarkValue, titleValue } = this.state
     // 对checkoutTodo做一个判断
     if (checkedTodo === null || checkedTodo === undefined) {
       return <div></div>
@@ -140,17 +167,27 @@ class NavRight extends React.Component {
       <div>
         <div className={styled.header}>
           <div>
-            <div className={`${styled.title} ${checkedTodo.isFinish ? styled.finished : ''}`}>{checkedTodo.title}</div>
+            {/* <div className={`${styled.title} ${checkedTodo.isFinish ? styled.finished : ''}`}>{checkedTodo.title}</div> */}
+            <input 
+              className={`${styled.title} ${checkedTodo.isFinish ? styled.finished : ''}`}
+              type="text"
+              value={titleValue}
+              onChange={this.handleTitleChange}
+              onKeyPress={this.handleModifyTitle}
+            />
           </div>
           {this.getTodoItem()}
           <div className={styled.add}>
             <Icon type="plus" className={styled.plus} />
+            {/* 将input中ref关联到构造器里创建的textFocus上 */}
             <input
               className={styled.addStep}
               placeholder="添加步骤"
-              value={value}
+              value={stepValue}
               onKeyPress={this.handleEnterClick}
-              onChange={this.handleChange} />
+              onChange={this.handleStepChange} 
+              ref={this.textFocus}
+            />
           </div>
         </div>
         {

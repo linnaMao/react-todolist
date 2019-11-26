@@ -6,6 +6,8 @@
     font-weight: bold;
     color: #333;
     padding: 20px 0;
+    border: none;
+    outline: none;
     &.finished {
       color: #777;
       text-decoration: line-through;
