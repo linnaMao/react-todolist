@@ -127,6 +127,11 @@ class NavRight extends React.Component {
       // 更新页面
       getTodoListByTitle(currentTodoType)
       this.textFocus.current.focus()
+    } else if (e.nativeEvent.keyCode === 13 && titleValue === "") {
+      alert('标题不能为空')
+      this.setState({
+        titleValue: checkedTodo.title
+      })
     }
   }
 

@@ -30,7 +30,7 @@ class TodoStep extends React.Component {
     const { content, handleModifyStep } = this.props
     if (e.nativeEvent.keyCode === 13 && value !== "")  {
       handleModifyStep(content.id, value)
-    } else if(value === "") {
+    } else if(e.nativeEvent.keyCode === 13 && value === "") {
       alert('内容不能为空')
       this.setState({
         value: content.title
