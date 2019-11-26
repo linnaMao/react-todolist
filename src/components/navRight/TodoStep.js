@@ -1,7 +1,7 @@
 import React from 'react';
 import { Icon } from 'antd';
 import styled from './index.scss';
-import { IconFont } from '../common/common';
+import { IconFont } from '../Iconfont';
 
 class TodoStep extends React.Component {
 

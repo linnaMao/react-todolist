@@ -4,7 +4,7 @@ import NavLeft from './components/NavLeft';
 import NavRight from './components/NavRight';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import Home from './components/Home';
+import TodoItem from './components/TodoItem'
 
 import styled from './style/common.scss';
 import { getListByType } from './axios';
@@ -18,6 +18,21 @@ class Admin extends React.Component {
       checkedTodo: null, // 选中右边的todo
       isShow: false
     }
+  }
+
+  getTodoItem() {
+    const { todoList, homeHeadTitle } = this.state;
+    return (
+      todoList.map((item, index) => (
+        <TodoItem
+          currentTodoType={homeHeadTitle}
+          key={item.id}
+          content={item}
+          handleClick={this.handleTodoClick}
+          getTodoListByTitle={this.getTodoListByTitle}
+        />
+      ))
+    )
   }
 
   componentDidMount() {
@@ -63,7 +78,7 @@ class Admin extends React.Component {
   }
 
   render() {
-    const { homeHeadTitle, todoList, checkedTodo, isShow } = this.state
+    const { homeHeadTitle, checkedTodo, isShow } = this.state
     return (
       <div>
         <Row type="flex" className={styled.container}>
@@ -78,12 +93,7 @@ class Admin extends React.Component {
             >
             <Header title={homeHeadTitle} />
             <Row className={styled.content}>
-              <Home
-                currentTodoType={homeHeadTitle}
-                todoList={todoList}
-                handleTodoClick={this.handleTodoClick}
-                getTodoListByTitle={this.getTodoListByTitle}
-              />
+              {this.getTodoItem()}
             </Row>
             <Footer
               currentTodoType={homeHeadTitle}

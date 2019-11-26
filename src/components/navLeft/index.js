@@ -2,7 +2,7 @@ import React from 'react';
 import styled from './index.scss';
 import { Menu } from 'antd';
 import NavConfig from '../../config/navConfig';
-import { IconFont } from '../common/common'
+import { IconFont } from '../Iconfont'
 
 const { SubMenu, Item } = Menu;
 

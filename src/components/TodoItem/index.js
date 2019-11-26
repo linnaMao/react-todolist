@@ -1,9 +1,9 @@
 import React from 'react';
-import styled from '../index.scss';
+import styled from './index.scss';
 import { Icon } from 'antd';
-import { IconFont } from '../../common/common';
+import { IconFont } from '../Iconfont';
 
-import { finished, star, deleteItem }  from '../../../axios'
+import { finished, star, deleteItem }  from '../../axios'
 
 class TodoItem extends React.Component {
 

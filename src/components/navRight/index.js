@@ -3,7 +3,7 @@ import styled from './index.scss';
 import TodoStep from './TodoStep';
 import Step from '../../db/Entity/Step';
 import { Icon } from 'antd';
-import { IconFont } from '../common/common';
+import { IconFont } from '../Iconfont';
 import { 
   addMyDay, 
   addRemark, 
