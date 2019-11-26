@@ -10,9 +10,15 @@ function setItem(name, item) {
 
 export function insertTodoServer(todo) {
   const allTodo = getItem("todoItem")
+  // if (todo.type === "重要") {
+  //   return {
+  //     ...todo,
+  //     isStar: true
+  //   }
+  // }
   allTodo.push(todo)
   setItem("todoItem", allTodo)
-}
+} //有问题
 
 export function getListByTypeServer(type) {
   const allTodo = getItem("todoItem")
