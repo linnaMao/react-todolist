@@ -47,6 +47,10 @@ class NavLeft extends React.Component {
         <Menu defaultSelectedKeys="/admin/day" theme="light">
           {navList}
         </Menu>
+        <div className={styled.addNewList}>
+          <IconFont type="icon-hao-copy" />
+          <input type="text" placeholder="新建清单" />
+        </div>
       </div>
     )
   }

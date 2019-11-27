@@ -38,7 +38,6 @@ class Admin extends React.Component {
   componentDidMount() {
     const { homeHeadTitle } = this.state
     const lists = getListByType(homeHeadTitle)
-    console.log(lists)
     this.setState({
       todoList: lists
     })
@@ -67,14 +66,25 @@ class Admin extends React.Component {
         isShow: !preState.isShow
       }))
     }
+    if(window.localStorage) {
+      var num= (1024 * 1024 * 5 - unescape(encodeURIComponent(JSON.stringify(localStorage))).length) / (1024);
+      console.log("当前localStorage容量还剩" + num.toFixed(2) +"KB");
+    }
   }
 
   // 右栏显示
   handleTodoClick = (todo) => {
-    this.setState((preState) => ({
-        checkedTodo: todo,
-        isShow: !preState.isShow
-      }))
+    const { checkedTodo, isShow } = this.state
+    let todoId = todo.id
+    this.setState({
+      checkedTodo: todo,
+      isShow: true
+    })
+    if (checkedTodo !== null) {
+      (checkedTodo.id === todoId) && this.setState({
+        isShow: !isShow
+      })
+    }
   }
 
   render() {

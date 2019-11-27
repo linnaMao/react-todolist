@@ -183,7 +183,8 @@ class NavRight extends React.Component {
           </div>
           {this.getTodoItem()}
           <div className={styled.add}>
-            <Icon type="plus" className={styled.plus} />
+            {/* <Icon type="plus" className={styled.plus} /> */}
+            <IconFont type="icon-hao-copy" className={styled.plus} />
             {/* 将input中ref关联到构造器里创建的textFocus上 */}
             <input
               className={styled.addStep}
