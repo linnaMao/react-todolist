@@ -1,6 +1,29 @@
+.headerWrap {
+  padding: 25px 0;
+}
+
 .title {
+  display: inline-block;
   font-size: 25px;
   font-weight: bold;
   color: #fff;
-  padding: 25px 0;
+}
+
+.more {
+  float: right;
+  line-height: 38px;
+  .moreButton {
+    padding: 0 8px;
+    color: #2f90e8;
+    border: none;
+    &:hover {
+      background-color: #2f90e8;
+      color: #fff;
+      border: none;
+    }
+  }
+  .item {
+    width: 150px;
+    display: flex;
+  }
 }

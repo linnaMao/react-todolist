@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from './index.scss';
-import { Icon } from 'antd';
 import { IconFont } from '../Iconfont'
 
 import Todo from '../../db/Entity/Todo';
@@ -41,7 +40,6 @@ class Footer extends React.Component {
     const { value } = this.state
     return (
       <div className={styled.footer}>
-        {/* <Icon type="plus" /> */}
         <IconFont type="icon-hao-copy" />
         <input 
           value={value}
