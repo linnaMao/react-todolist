@@ -7,7 +7,7 @@ import Footer from './components/Footer';
 import TodoItem from './components/TodoItem'
 
 import styled from './Admin.scss';
-import { getListByType } from './axios';
+import { getListByType, hideFinished } from './axios';
 
 class Admin extends React.Component {
   constructor(props) {
@@ -87,6 +87,24 @@ class Admin extends React.Component {
     }
   }
 
+  // 点击隐藏已完成列表
+  handleHideClick = (hideTitle) => {
+    const { homeHeadTitle } = this.state
+    //  找出已经完成的list
+    if (hideTitle) {
+      const showList = getListByType(homeHeadTitle)
+      this.setState({
+        todoList: showList
+      })
+    } else {
+      const hideList = hideFinished(homeHeadTitle)
+      this.setState({
+        todoList: hideList
+      })
+    }
+  }
+
+
   render() {
     const { homeHeadTitle, checkedTodo, isShow } = this.state
     return (
@@ -101,7 +119,10 @@ class Admin extends React.Component {
             span={isShow?15:20} 
             className={styled.main}
             >
-            <Header title={homeHeadTitle} />
+            <Header 
+              title={homeHeadTitle}
+              handleHideClick={this.handleHideClick}
+            />
             <Row className={styled.content}>
               {this.getTodoItem()}
             </Row>

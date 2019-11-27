@@ -10,7 +10,8 @@ import {
   deleteStepServer,
   stepFinishServer,
   modifyStepServer,
-  modifyTitleServer
+  modifyTitleServer,
+  hideFinishedServer
 } from '../server'
 export function insertTodo (todo) {
   return insertTodoServer(todo)
@@ -58,4 +59,8 @@ export function modifyStep(todoId, stepId, value) {
 
 export function modifyTitle(todoId, value) {
   return modifyTitleServer(todoId, value)
+}
+
+export function hideFinished(type) {
+  return hideFinishedServer(type)
 }

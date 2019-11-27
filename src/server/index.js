@@ -1,3 +1,4 @@
+
 function getItem(name) {
   const json = localStorage.getItem(name) 
   return JSON.parse(json)
@@ -22,7 +23,6 @@ export function insertTodoServer(todo) {
 
 export function getListByTypeServer(type) {
   const allTodo = getItem("todoItem")
-  // filter过滤
   const res = allTodo.filter(i => i.type === type)
   return res
 }
@@ -178,3 +178,14 @@ export function modifyTitleServer(todoId, value) {
   })
   setItem("todoItem", res)
 }
+
+export function hideFinishedServer(type) {
+  const allTodo = getItem("todoItem")
+  const res = allTodo.filter(i => (i.type === type && i.isFinish === false))
+  return res
+}
+
+// export function showFinishedServer(type) {
+//   const allTodo = getItem("todoItem")
+//   const res = allTodo.filter(i => i.type === type)
+// }
