@@ -2,6 +2,7 @@ import React from 'react';
 import styled from './index.scss';
 import TodoStep from './TodoStep';
 import Step from '../../db/Entity/Step';
+import Moment from '../Moment'
 import { Alert } from 'antd';
 import { IconFont } from '../Iconfont';
 import { 
@@ -24,22 +25,22 @@ class NavRight extends React.Component {
       step: props.checkedTodo ? [...props.checkedTodo.step] : [],
       stepValue: '',
       remarkValue: props.checkedTodo ? props.checkedTodo.remark : "",
-      titleValue: props.checkedTodo ? props.checkedTodo.title : ""
+      titleValue: props.checkedTodo ? props.checkedTodo.title : "",
+      remarkTime: props.checkedTodo ? props.checkedTodo.remarkTime: ""
     }
     // 创建一个ref来存储textFocus中的Dom元素
     this.textFocus = React.createRef()
   }
-
 
   componentWillReceiveProps(nextProps) {
     this.setState({
       step: nextProps.checkedTodo ? [...nextProps.checkedTodo.step] : [],
       checkedTodo: nextProps.checkedTodo,
       remarkValue: nextProps.checkedTodo ? nextProps.checkedTodo.remark : "",
-      titleValue: nextProps.checkedTodo ? nextProps.checkedTodo.title : ""
+      titleValue: nextProps.checkedTodo ? nextProps.checkedTodo.title : "",
+      remarkTime: nextProps.checkedTodo ? nextProps.checkedTodo.remarkTime: ""
     })
   }
-
 
   // 获取step值
   handleStepChange = (e) => {
@@ -119,9 +120,17 @@ class NavRight extends React.Component {
 
   // 跳出备注区域
   handleBlur = () => {
-    const { checkedTodo } = this.props
+    const { getTodoListByTitle, checkedTodo, currentTodoType } = this.props
+    const { remarkValue } = this.state
+    if (remarkValue.trim().length === 0) {
+      return this.setState({
+        remarkValue:""
+      })
+    }
+    
     // 修改数据库
-    addRemark(checkedTodo.id, this.state.remarkValue)
+    addRemark(checkedTodo.id, remarkValue)
+    getTodoListByTitle(currentTodoType)
   }
 
   // 修改标题
@@ -170,7 +179,7 @@ class NavRight extends React.Component {
 
   render() {
     const { checkedTodo, createTime } = this.props
-    const { stepValue, remarkValue, titleValue } = this.state
+    const { stepValue, remarkValue, titleValue, remarkTime } = this.state
     // 对checkoutTodo做一个判断
     if (checkedTodo === null || checkedTodo === undefined) {
       return <div></div>
@@ -179,7 +188,6 @@ class NavRight extends React.Component {
       <div>
         <div className={styled.header}>
           <div>
-            {/* <div className={`${styled.title} ${checkedTodo.isFinish ? styled.finished : ''}`}>{checkedTodo.title}</div> */}
             <input 
               className={`${styled.title} ${checkedTodo.isFinish ? styled.finished : ''}`}
               type="text"
@@ -190,9 +198,7 @@ class NavRight extends React.Component {
           </div>
           {this.getTodoItem()}
           <div className={styled.add}>
-            {/* <Icon type="plus" className={styled.plus} /> */}
             <IconFont type="icon-hao-copy" className={styled.plus} />
-            {/* 将input中ref关联到构造器里创建的textFocus上 */}
             <input
               className={styled.addStep}
               placeholder="添加步骤"
@@ -213,11 +219,17 @@ class NavRight extends React.Component {
         <div className={styled.remark}>
           <textarea 
             rows="20" 
-            placeholder="添加备注" 
+            placeholder="添加备注"
             onBlur={this.handleBlur}
             value={remarkValue}
             onChange={this.handleRemarkChange}
           />
+          <div 
+            className={styled.remarkTime}
+            style={{ display: (remarkValue === ""|| remarkValue.trim().length === 0)?"none":"block" }}
+            >
+              更新于{Moment.formateDate(remarkTime)}
+          </div>
         </div>
         <div className={styled.createTime}>
           <div className={styled.time}>创建于{createTime}</div>
@@ -225,8 +237,8 @@ class NavRight extends React.Component {
             <Alert message="删除任务" className={styled.tip} type="error" />
             <IconFont className={styled.clear} type="icon-lajitong" />
           </div>
+          </div>
         </div>
-      </div>
     )
   }
 }

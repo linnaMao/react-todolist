@@ -77,7 +77,8 @@ export function addRemarkServer(id, value) {
     if(item.id === id) {
       return {
         ...item,
-        remark: value
+        remark: value,
+        remarkTime: new Date().getTime()
       }
     }
     return {...item}

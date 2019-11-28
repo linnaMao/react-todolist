@@ -140,5 +140,8 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "moment-locales-webpack-plugin": "^1.1.2"
   }
 }

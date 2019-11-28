@@ -3,6 +3,7 @@ export default class Todo {
     this.title = title
     this.id = new Date().getTime()
     this.createTime = new Date().getTime()
+    this.remarkTime = new Date().getTime()
     this.isFinish = false
     this.isStar = false
     this.remark = ''

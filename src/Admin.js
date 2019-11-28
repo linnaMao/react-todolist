@@ -19,7 +19,8 @@ class Admin extends React.Component {
       checkedTodo: null, // 选中右边的todo
       isShow: false,
       hideTitle: false,
-      createTime: ""
+      createTime: "",
+      remarkTime: ""
     }
   }
 
@@ -27,6 +28,7 @@ class Admin extends React.Component {
     const { todoList, homeHeadTitle, hideTitle } = this.state;
     return (
       todoList.map((item) => {
+        console.log(item.remarkTime)
         const todoItem = 
           <TodoItem
           currentTodoType={homeHeadTitle}
@@ -50,6 +52,7 @@ class Admin extends React.Component {
     this.setState({
       todoList: lists
     })
+    console.log(lists)
   }
 
   // 点击左栏title
@@ -85,11 +88,13 @@ class Admin extends React.Component {
   handleTodoClick = (todo) => {
     const { checkedTodo, isShow } = this.state
     let todoId = todo.id
+    let remarkTime = todo.remarkTime
     let createTime = Moment.formateDate(todo.createTime)
     this.setState({
       checkedTodo: todo,
       isShow: true,
-      createTime
+      createTime,
+      remarkTime
     }, () =>{
       if (checkedTodo !== null && checkedTodo !== undefined) {
         (checkedTodo.id === todoId) && this.setState({
@@ -114,17 +119,21 @@ class Admin extends React.Component {
   }
 
   render() {
-    const { homeHeadTitle, checkedTodo, isShow, hideTitle, createTime } = this.state
+    const { homeHeadTitle, checkedTodo, isShow, hideTitle, createTime, remarkTime } = this.state
     return (
       <div>
         <Row type="flex" className={styled.container}>
-          <Col span={4} className={styled.navLeft}>
+          <Col 
+            xs={{ span: 0 }}
+            lg={{ span: 4 }} 
+            className={styled.navLeft}>
             <NavLeft 
               handleTitleClick={this.handleTitleClick}
             />
           </Col>
           <Col 
-            span={isShow?15:20} 
+            xs={{ span: isShow?0:24 }}
+            lg={{ span: isShow?15:20 }} 
             className={styled.main}
             >
             <Header 
@@ -140,12 +149,17 @@ class Admin extends React.Component {
               getTodoListByTitle={this.getTodoListByTitle}
             />
           </Col>
-          <Col span={isShow?5:0} className={styled.navRight} style={ isShow ? {display: 'block'} : {display: 'none'}}>
+          <Col 
+            xs={{ span: isShow?24:0 }}
+            lg={{ span: isShow?5:0 }}
+            className={styled.navRight} 
+            style={ isShow ? {display: 'block'} : {display: 'none'}}>
             <NavRight 
               checkedTodo={checkedTodo}
               getTodoListByTitle={this.getTodoListByTitle}
               currentTodoType={homeHeadTitle}
               createTime={createTime}
+              remarkTime={remarkTime}
               handleDeleteItem = {this.handleDeleteItem}
             />
           </Col>

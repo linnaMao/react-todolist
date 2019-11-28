@@ -50,6 +50,7 @@
 }
 
 .remark {
+  position: relative;
   padding: 10px;
   textarea {
     width: 100%;
@@ -75,6 +76,13 @@
     &::-webkit-scrollbar-thumb:hover {
     background-color:#bbb;
     }
+  }
+  .remarkTime {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    font-size: 13px;
+    color: #ababab;
   }
 }
 
