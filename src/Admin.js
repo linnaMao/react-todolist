@@ -8,7 +8,7 @@ import Footer from './components/Footer';
 import TodoItem from './components/TodoItem'
 
 import styled from './Admin.scss';
-import { getListByType } from './axios';
+import { getListByType, deleteItem } from './axios';
 
 class Admin extends React.Component {
   constructor(props) {
@@ -70,19 +70,6 @@ class Admin extends React.Component {
       todoList: lists,
       checkedTodo: checkedTodo && lists.find(i => i.id === checkedTodo.id)
     })
-    // if (hideTitle) {
-    //   const showList = showFinished(title)
-    //   this.setState({
-    //     todoList: showList,
-    //     checkedTodo: checkedTodo && showList.find(i => i.id === checkedTodo.id)
-    //   })
-    // } else {
-    //   const hideList = hideFinished(title)
-    //   this.setState({
-    //     todoList: hideList,
-    //     checkedTodo: checkedTodo && hideList.find(i => i.id === checkedTodo.id)
-    //   })
-    // }
     if(checkedTodo && checkedTodo.id === id) {
       this.setState((preState) => ({
         isShow: !preState.isShow
@@ -103,34 +90,27 @@ class Admin extends React.Component {
       checkedTodo: todo,
       isShow: true,
       createTime
+    }, () =>{
+      if (checkedTodo !== null && checkedTodo !== undefined) {
+        (checkedTodo.id === todoId) && this.setState({
+          isShow: !isShow
+        })
+      }
     })
-    if (checkedTodo !== null) {
-      (checkedTodo.id === todoId) && this.setState({
-        isShow: !isShow
-      })
-    }
+    
   }
 
   // 点击隐藏已完成列表
   handleHideClick = () => {
-    // const { homeHeadTitle, hideTitle } = this.state
-    //  找出已经完成的list
-    // if (hideTitle) {
-    //   const showList = showFinished(homeHeadTitle)
-    //   this.setState({
-    //     todoList: showList,
-    //     hideTitle: false
-    //   })
-    // } else {
-    //   const hideList = hideFinished(homeHeadTitle)
-    //   this.setState({
-    //     todoList: hideList,
-    //     hideTitle: true
-    //   })
-    // }
     this.setState((preState) => ({
       hideTitle: !preState.hideTitle
     }))
+  }
+
+  // 删除右列todo
+  handleDeleteItem = () => {
+    const { checkedTodo } = this.state
+    deleteItem(checkedTodo.id)
   }
 
   render() {
@@ -166,6 +146,7 @@ class Admin extends React.Component {
               getTodoListByTitle={this.getTodoListByTitle}
               currentTodoType={homeHeadTitle}
               createTime={createTime}
+              handleDeleteItem = {this.handleDeleteItem}
             />
           </Col>
         </Row>

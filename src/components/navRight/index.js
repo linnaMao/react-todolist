@@ -89,7 +89,7 @@ class NavRight extends React.Component {
     getTodoListByTitle(currentTodoType)
   }
 
-  // 删除todo
+  // 删除右列todo
   handleClick = (index) => {
     const { step, checkedTodo } = this.state;
     const { getTodoListByTitle, currentTodoType } = this.props
@@ -99,6 +99,13 @@ class NavRight extends React.Component {
     })
     deleteStep(checkedTodo.id, [...step])
     getTodoListByTitle(currentTodoType)
+  }
+
+  // 删除整个todo
+  handleDeleteItem = () => {
+    const { getTodoListByTitle, currentTodoType, checkedTodo, handleDeleteItem } = this.props
+    handleDeleteItem()
+    getTodoListByTitle(currentTodoType, checkedTodo.id)
   }
 
   // 添加到我的一天
@@ -214,7 +221,7 @@ class NavRight extends React.Component {
         </div>
         <div className={styled.createTime}>
           <div className={styled.time}>创建于{createTime}</div>
-          <div className={styled.clearTip}>
+          <div className={styled.clearTip} onClick={this.handleDeleteItem}>
             <Alert message="删除任务" className={styled.tip} type="error" />
             <IconFont className={styled.clear} type="icon-lajitong" />
           </div>
