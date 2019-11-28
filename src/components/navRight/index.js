@@ -2,6 +2,7 @@ import React from 'react';
 import styled from './index.scss';
 import TodoStep from './TodoStep';
 import Step from '../../db/Entity/Step';
+import { Alert } from 'antd';
 import { IconFont } from '../Iconfont';
 import { 
   addMyDay, 
@@ -29,6 +30,7 @@ class NavRight extends React.Component {
     this.textFocus = React.createRef()
   }
 
+
   componentWillReceiveProps(nextProps) {
     this.setState({
       step: nextProps.checkedTodo ? [...nextProps.checkedTodo.step] : [],
@@ -37,6 +39,7 @@ class NavRight extends React.Component {
       titleValue: nextProps.checkedTodo ? nextProps.checkedTodo.title : ""
     })
   }
+
 
   // 获取step值
   handleStepChange = (e) => {
@@ -109,11 +112,9 @@ class NavRight extends React.Component {
 
   // 跳出备注区域
   handleBlur = () => {
-    const { getTodoListByTitle, checkedTodo, currentTodoType } = this.props
+    const { checkedTodo } = this.props
     // 修改数据库
     addRemark(checkedTodo.id, this.state.remarkValue)
-    // 刷新页面
-    getTodoListByTitle(currentTodoType)
   }
 
   // 修改标题
@@ -161,7 +162,7 @@ class NavRight extends React.Component {
   }
 
   render() {
-    const { checkedTodo } = this.props
+    const { checkedTodo, createTime } = this.props
     const { stepValue, remarkValue, titleValue } = this.state
     // 对checkoutTodo做一个判断
     if (checkedTodo === null || checkedTodo === undefined) {
@@ -210,6 +211,13 @@ class NavRight extends React.Component {
             value={remarkValue}
             onChange={this.handleRemarkChange}
           />
+        </div>
+        <div className={styled.createTime}>
+          <div className={styled.time}>创建于{createTime}</div>
+          <div className={styled.clearTip}>
+            <Alert message="删除任务" className={styled.tip} type="error" />
+            <IconFont className={styled.clear} type="icon-lajitong" />
+          </div>
         </div>
       </div>
     )

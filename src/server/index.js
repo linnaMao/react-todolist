@@ -11,17 +11,11 @@ function setItem(name, item) {
 
 export function insertTodoServer(todo) {
   const allTodo = getItem("todoItem")
-  // if (todo.type === "重要") {
-  //   return {
-  //     ...todo,
-  //     isStar: true
-  //   }
-  // }
   allTodo.push(todo)
   setItem("todoItem", allTodo)
 } //有问题
 
-export function getListByTypeServer(type) {
+export function getListByTypeServer(type, hideTitle) {
   const allTodo = getItem("todoItem")
   const res = allTodo.filter(i => i.type === type)
   return res
@@ -178,14 +172,3 @@ export function modifyTitleServer(todoId, value) {
   })
   setItem("todoItem", res)
 }
-
-export function hideFinishedServer(type) {
-  const allTodo = getItem("todoItem")
-  const res = allTodo.filter(i => (i.type === type && i.isFinish === false))
-  return res
-}
-
-// export function showFinishedServer(type) {
-//   const allTodo = getItem("todoItem")
-//   const res = allTodo.filter(i => i.type === type)
-// }

@@ -6,20 +6,12 @@ import { IconFont } from '../Iconfont'
 const { Item } = Menu
 
 class Header extends React.Component {
-  state = {
-    hideTitle: false
-  }
   handleHideClick = () => {
     const { handleHideClick } = this.props
-    const { hideTitle } = this.state
-    handleHideClick(hideTitle)
-    this.setState({
-      hideTitle: !hideTitle
-    })
+    handleHideClick()
   }
   render() {
-    const { title } = this.props
-    const { hideTitle } = this.state
+    const { title, hideTitle } = this.props
     const menu = (
       <Menu>
         <Item className={styled.item} onClick={this.handleHideClick}>

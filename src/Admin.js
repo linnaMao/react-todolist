@@ -1,5 +1,6 @@
 import React from 'react';
 import { Row, Col } from 'antd';
+import Moment from './components/Moment';
 import NavLeft from './components/NavLeft';
 import NavRight from './components/NavRight';
 import Header from './components/Header';
@@ -7,7 +8,7 @@ import Footer from './components/Footer';
 import TodoItem from './components/TodoItem'
 
 import styled from './Admin.scss';
-import { getListByType, hideFinished } from './axios';
+import { getListByType } from './axios';
 
 class Admin extends React.Component {
   constructor(props) {
@@ -16,22 +17,30 @@ class Admin extends React.Component {
       homeHeadTitle: '我的一天',
       todoList: [],  // 中间的todos
       checkedTodo: null, // 选中右边的todo
-      isShow: false
+      isShow: false,
+      hideTitle: false,
+      createTime: ""
     }
   }
 
   getTodoItem() {
-    const { todoList, homeHeadTitle } = this.state;
+    const { todoList, homeHeadTitle, hideTitle } = this.state;
     return (
-      todoList.map((item, index) => (
-        <TodoItem
+      todoList.map((item) => {
+        const todoItem = 
+          <TodoItem
           currentTodoType={homeHeadTitle}
           key={item.id}
           content={item}
           handleClick={this.handleTodoClick}
           getTodoListByTitle={this.getTodoListByTitle}
         />
-      ))
+        if (!hideTitle) {
+          return todoItem
+        } else if (hideTitle && !item.isFinish) {
+          return todoItem
+        }
+      })
     )
   }
 
@@ -55,12 +64,25 @@ class Admin extends React.Component {
 
   // 根据title获取todolist
   getTodoListByTitle = (title, id) => {
-    const { checkedTodo } = this.state
-    const lists =  getListByType(title)
+    const { checkedTodo, hideTitle } = this.state
+    const lists =  getListByType(title, hideTitle)
     this.setState({
       todoList: lists,
       checkedTodo: checkedTodo && lists.find(i => i.id === checkedTodo.id)
     })
+    // if (hideTitle) {
+    //   const showList = showFinished(title)
+    //   this.setState({
+    //     todoList: showList,
+    //     checkedTodo: checkedTodo && showList.find(i => i.id === checkedTodo.id)
+    //   })
+    // } else {
+    //   const hideList = hideFinished(title)
+    //   this.setState({
+    //     todoList: hideList,
+    //     checkedTodo: checkedTodo && hideList.find(i => i.id === checkedTodo.id)
+    //   })
+    // }
     if(checkedTodo && checkedTodo.id === id) {
       this.setState((preState) => ({
         isShow: !preState.isShow
@@ -76,9 +98,11 @@ class Admin extends React.Component {
   handleTodoClick = (todo) => {
     const { checkedTodo, isShow } = this.state
     let todoId = todo.id
+    let createTime = Moment.formateDate(todo.createTime)
     this.setState({
       checkedTodo: todo,
-      isShow: true
+      isShow: true,
+      createTime
     })
     if (checkedTodo !== null) {
       (checkedTodo.id === todoId) && this.setState({
@@ -88,25 +112,29 @@ class Admin extends React.Component {
   }
 
   // 点击隐藏已完成列表
-  handleHideClick = (hideTitle) => {
-    const { homeHeadTitle } = this.state
+  handleHideClick = () => {
+    // const { homeHeadTitle, hideTitle } = this.state
     //  找出已经完成的list
-    if (hideTitle) {
-      const showList = getListByType(homeHeadTitle)
-      this.setState({
-        todoList: showList
-      })
-    } else {
-      const hideList = hideFinished(homeHeadTitle)
-      this.setState({
-        todoList: hideList
-      })
-    }
+    // if (hideTitle) {
+    //   const showList = showFinished(homeHeadTitle)
+    //   this.setState({
+    //     todoList: showList,
+    //     hideTitle: false
+    //   })
+    // } else {
+    //   const hideList = hideFinished(homeHeadTitle)
+    //   this.setState({
+    //     todoList: hideList,
+    //     hideTitle: true
+    //   })
+    // }
+    this.setState((preState) => ({
+      hideTitle: !preState.hideTitle
+    }))
   }
 
-
   render() {
-    const { homeHeadTitle, checkedTodo, isShow } = this.state
+    const { homeHeadTitle, checkedTodo, isShow, hideTitle, createTime } = this.state
     return (
       <div>
         <Row type="flex" className={styled.container}>
@@ -121,6 +149,7 @@ class Admin extends React.Component {
             >
             <Header 
               title={homeHeadTitle}
+              hideTitle={hideTitle}
               handleHideClick={this.handleHideClick}
             />
             <Row className={styled.content}>
@@ -136,6 +165,7 @@ class Admin extends React.Component {
               checkedTodo={checkedTodo}
               getTodoListByTitle={this.getTodoListByTitle}
               currentTodoType={homeHeadTitle}
+              createTime={createTime}
             />
           </Col>
         </Row>
