@@ -1,3 +1,4 @@
+import Title from '../db/Entity/Title'
 
 function getItem(name) {
   const json = localStorage.getItem(name) 
@@ -10,14 +11,14 @@ function setItem(name, item) {
 }
 
 export function insertTodoServer(todo) {
-  const allTodo = getItem("todoItem")
+  const allTodo = getItem("Todo")
   allTodo.push(todo)
-  setItem("todoItem", allTodo)
-} //有问题
+  setItem("Todo", allTodo)
+} 
 
-export function getListByTypeServer(type, hideTitle) {
+export function getListByTypeServer(id) {
   const allTodo = getItem("todoItem")
-  const res = allTodo.filter(i => i.type === type)
+  const res = allTodo.filter(i => i.id === id)
   return res
 }
 
@@ -115,7 +116,6 @@ export function deleteStepServer(id, step) {
 }
 
 export function stepFinishServer(todoId, stepId) {
-  console.log(todoId, stepId)
   const allTodo = getItem("todoItem")
   const todoRes = allTodo.map((item) => {
     if (item.id === todoId) {
@@ -172,4 +172,18 @@ export function modifyTitleServer(todoId, value) {
     return {...item}
   })
   setItem("todoItem", res)
+}
+
+// 获取左侧标题
+export function getTitleListServer() {
+  const allTitle = getItem("Title")
+  return allTitle
+}
+
+export function insertTitleServer(titleValue) {
+  const allTitle = getItem("Title")
+  const title = new Title(titleValue)
+  allTitle.push(title)
+  setItem("Title", allTitle)
+
 }

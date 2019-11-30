@@ -25,7 +25,7 @@ class Footer extends React.Component {
 
     if (e.nativeEvent.keyCode === 13 && value !== "") {
       // 发起请求存todo
-      const todo = new Todo(value, currentTodoType)
+      const todo = new Todo(value, [currentTodoType])
       insertTodo(todo)
       this.setState({
         value: ''

@@ -2,7 +2,8 @@ import React from 'react';
 import { Row, Col } from 'antd';
 import Moment from './components/Moment';
 import NavLeft from './components/NavLeft';
-import NavRight from './components/NavRight';
+// import NavRight from './components/NavRight';
+import NavRight from './components/NavRight'
 import Header from './components/Header';
 import Footer from './components/Footer';
 import TodoItem from './components/TodoItem'
@@ -42,6 +43,7 @@ class Admin extends React.Component {
         } else if (hideTitle && !item.isFinish) {
           return todoItem
         }
+        return null
       })
     )
   }
@@ -56,19 +58,19 @@ class Admin extends React.Component {
   }
 
   // 点击左栏title
-  handleTitleClick = (title) => {
+  handleTitleClick = (item) => {
     this.setState({
-      homeHeadTitle: title,
+      homeHeadTitle: item.titleName,
       isShow: false
     })
     // 根据title获取todolist
-    this.getTodoListByTitle(title)
+    this.getTodoListByTitle(item.id)
   }
 
   // 根据title获取todolist
-  getTodoListByTitle = (title, id) => {
+  getTodoListByTitle = (id) => {
     const { checkedTodo, hideTitle } = this.state
-    const lists =  getListByType(title, hideTitle)
+    const lists =  getListByType(id, hideTitle)
     this.setState({
       todoList: lists,
       checkedTodo: checkedTodo && lists.find(i => i.id === checkedTodo.id)

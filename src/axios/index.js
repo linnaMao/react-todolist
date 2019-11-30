@@ -10,14 +10,16 @@ import {
   deleteStepServer,
   stepFinishServer,
   modifyStepServer,
-  modifyTitleServer
+  modifyTitleServer,
+  getTitleListServer,
+  insertTitleServer
 } from '../server'
 export function insertTodo (todo) {
   return insertTodoServer(todo)
 }
 
-export function getListByType(type) {
-  return getListByTypeServer(type)
+export function getListByType(id) {
+  return getListByTypeServer(id)
 }
 
 export function finished(id) {
@@ -58,4 +60,14 @@ export function modifyStep(todoId, stepId, value) {
 
 export function modifyTitle(todoId, value) {
   return modifyTitleServer(todoId, value)
+}
+
+// 获取左侧标题
+export function getTitleList() {
+  return getTitleListServer()
+}
+
+// 新增左侧标题
+export function insertTitle(titleValue) {
+  return insertTitleServer(titleValue)
 }

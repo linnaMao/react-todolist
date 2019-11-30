@@ -1,8 +1,8 @@
 export default class Step {
-  constructor(id, title) {
+  constructor(todoId, title) {
     this.title = title
-    this.id = new Date().getTime()
-    this.todoId = id
+    this.id = "step" + new Date().getTime()
+    this.todoId = todoId
     this.createTime = new Date().getTime()
     this.isFinish = false
   }
