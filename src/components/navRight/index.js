@@ -21,7 +21,7 @@ class NavRight extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      checkedTodo: props.checkedTodo,
+      // checkedTodo: props.checkedTodo,
       step: props.checkedTodo ? [...props.checkedTodo.step] : [],
       stepValue: '',
       remarkValue: props.checkedTodo ? props.checkedTodo.remark : "",
@@ -35,7 +35,7 @@ class NavRight extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       step: nextProps.checkedTodo ? [...nextProps.checkedTodo.step] : [],
-      checkedTodo: nextProps.checkedTodo,
+      // checkedTodo: nextProps.checkedTodo,
       remarkValue: nextProps.checkedTodo ? nextProps.checkedTodo.remark : "",
       titleValue: nextProps.checkedTodo ? nextProps.checkedTodo.title : "",
       remarkTime: nextProps.checkedTodo ? nextProps.checkedTodo.remarkTime: ""
@@ -65,8 +65,8 @@ class NavRight extends React.Component {
 
   // 点击enter键添加todo
   handleEnterClick = (e) => {
-    const { stepValue, step, checkedTodo } = this.state
-    const { getTodoListByTitle, currentTodoType } = this.props
+    const { stepValue, step } = this.state
+    const { getTodoListByTitle, currentTodoType, checkedTodo } = this.props
     if (e.nativeEvent.keyCode === 13 && stepValue !== "") {
       this.setState({
         step: [
@@ -92,8 +92,8 @@ class NavRight extends React.Component {
 
   // 删除右列todo
   handleClick = (index) => {
-    const { step, checkedTodo } = this.state;
-    const { getTodoListByTitle, currentTodoType } = this.props
+    const { step } = this.state;
+    const { getTodoListByTitle, currentTodoType, checkedTodo } = this.props
     step.splice(index, 1);
     this.setState({
       step:[...step]
@@ -122,21 +122,20 @@ class NavRight extends React.Component {
   handleBlur = () => {
     const { getTodoListByTitle, checkedTodo, currentTodoType } = this.props
     const { remarkValue } = this.state
+    // 修改数据库
+    addRemark(checkedTodo.id, remarkValue)
     if (remarkValue.trim().length === 0) {
       return this.setState({
         remarkValue:""
       })
     }
-    
-    // 修改数据库
-    addRemark(checkedTodo.id, remarkValue)
     getTodoListByTitle(currentTodoType)
   }
 
   // 修改标题
   handleModifyTitle = (e) => {
-    const { titleValue, checkedTodo } = this.state
-    const { getTodoListByTitle, currentTodoType } = this.props
+    const { titleValue } = this.state
+    const { getTodoListByTitle, currentTodoType, checkedTodo } = this.props
     if (e.nativeEvent.keyCode === 13 && titleValue !== "") {
       // 更改数据库
       modifyTitle(checkedTodo.id, titleValue)

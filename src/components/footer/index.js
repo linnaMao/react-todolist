@@ -39,15 +39,17 @@ class Footer extends React.Component {
   render() {
     const { value } = this.state
     return (
-      <div className={styled.footer}>
-        <IconFont type="icon-hao-copy" />
-        <input 
-          value={value}
-          className={styled.add}  
-          placeholder="添加任务" 
-          onChange={this.handleChange} 
-          onKeyPress={this.handleEnterKey} 
-        />
+      <div >
+        <div className={styled.footer}>
+          <IconFont type="icon-hao-copy" />
+          <input 
+            value={value}
+            className={styled.add}  
+            placeholder="添加任务" 
+            onChange={this.handleChange} 
+            onKeyPress={this.handleEnterKey} 
+          />
+        </div>
       </div>
     )
   }
