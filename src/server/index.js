@@ -174,7 +174,6 @@ export function modifyTitleServer(todoId, value) {
   setItem("todoItem", res)
 }
 
-// 获取左侧标题
 export function getTitleListServer() {
   const allTitle = getItem("Title")
   return allTitle
@@ -186,4 +185,10 @@ export function insertTitleServer(titleValue) {
   allTitle.push(title)
   setItem("Title", allTitle)
 
+}
+
+export function deleteTitleSever(id) {
+  const allTitle = getItem("Title")
+  const res = allTitle.filter(i => i.id !== id)
+  setItem("Title", res)
 }

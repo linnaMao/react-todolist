@@ -2,20 +2,19 @@ import React from 'react';
 import { Row, Col } from 'antd';
 import Moment from './components/Moment';
 import NavLeft from './components/NavLeft';
-// import NavRight from './components/NavRight';
-import NavRight from './components/NavRight'
+import NavRight from './components/NavRight';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import TodoItem from './components/TodoItem'
 
 import styled from './Admin.scss';
-import { getListByType, deleteItem } from './axios';
+import { getListByType, deleteItem, deleteTitle, getTitleList } from './axios';
 
 class Admin extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      homeHeadTitle: '我的一天',
+      checkedTitle: {id: 'title' + new Date().getTime() + 0,titleName: '我的一天',},
       todoList: [],  // 中间的todos
       checkedTodo: null, // 选中右边的todo
       isShow: false,
@@ -26,18 +25,18 @@ class Admin extends React.Component {
   }
 
   getTodoItem() {
-    const { todoList, homeHeadTitle, hideTitle } = this.state;
+    const { todoList, checkedTitle, hideTitle } = this.state;
     return (
       todoList.map((item) => {
         console.log(item.remarkTime)
         const todoItem = 
           <TodoItem
-          currentTodoType={homeHeadTitle}
-          key={item.id}
-          content={item}
-          handleClick={this.handleTodoClick}
-          getTodoListByTitle={this.getTodoListByTitle}
-        />
+            currentTodoType={checkedTitle.titleName}
+            key={item.id}
+            content={item}
+            handleClick={this.handleTodoClick}
+            getTodoListByTitle={this.getTodoListByTitle}
+          />
         if (!hideTitle) {
           return todoItem
         } else if (hideTitle && !item.isFinish) {
@@ -49,18 +48,21 @@ class Admin extends React.Component {
   }
 
   componentDidMount() {
-    const { homeHeadTitle } = this.state
-    const lists = getListByType(homeHeadTitle)
+    const { checkedTitle } = this.state
+    const lists = getListByType(checkedTitle.id)
     this.setState({
       todoList: lists
     })
-    console.log(lists)
+    if(window.localStorage) {
+      var num= (1024 * 1024 * 5 - unescape(encodeURIComponent(JSON.stringify(localStorage))).length) / (1024);
+      console.log("当前localStorage容量还剩" + num.toFixed(2) +"KB");
+    }
   }
 
   // 点击左栏title
   handleTitleClick = (item) => {
     this.setState({
-      homeHeadTitle: item.titleName,
+      checkedTitle: item,
       isShow: false
     })
     // 根据title获取todolist
@@ -79,10 +81,6 @@ class Admin extends React.Component {
       this.setState((preState) => ({
         isShow: !preState.isShow
       }))
-    }
-    if(window.localStorage) {
-      var num= (1024 * 1024 * 5 - unescape(encodeURIComponent(JSON.stringify(localStorage))).length) / (1024);
-      console.log("当前localStorage容量还剩" + num.toFixed(2) +"KB");
     }
   }
 
@@ -120,8 +118,19 @@ class Admin extends React.Component {
     deleteItem(checkedTodo.id)
   }
 
+  // 获取title
+  getTitle = () => {
+    return getTitleList()
+  }
+
+  // 删除左侧标题
+  handleDeleteTitle = () => {
+    const { checkedTitle } = this.state
+    deleteTitle(checkedTitle.id)
+  }
+
   render() {
-    const { homeHeadTitle, checkedTodo, isShow, hideTitle, createTime, remarkTime } = this.state
+    const { checkedTitle, checkedTodo, isShow, hideTitle, createTime, remarkTime } = this.state
     return (
       <div>
         <Row type="flex" className={styled.container}>
@@ -131,6 +140,7 @@ class Admin extends React.Component {
             className={styled.navLeft}>
             <NavLeft 
               handleTitleClick={this.handleTitleClick}
+              getTitle={this.getTitle}
             />
           </Col>
           <Col 
@@ -139,15 +149,16 @@ class Admin extends React.Component {
             className={styled.main}
             >
             <Header 
-              title={homeHeadTitle}
+              title={checkedTitle.titleName}
               hideTitle={hideTitle}
               handleHideClick={this.handleHideClick}
+              handleDeleteTitle={this.handleDeleteTitle}
             />
             <Row className={styled.content}>
               {this.getTodoItem()}
             </Row>
             <Footer
-              currentTodoType={homeHeadTitle}
+              currentTodoType={checkedTitle.titleName}
               getTodoListByTitle={this.getTodoListByTitle}
             />
           </Col>
@@ -159,7 +170,7 @@ class Admin extends React.Component {
             <NavRight 
               checkedTodo={checkedTodo}
               getTodoListByTitle={this.getTodoListByTitle}
-              currentTodoType={homeHeadTitle}
+              currentTodoType={checkedTitle.titleName}
               createTime={createTime}
               remarkTime={remarkTime}
               handleDeleteItem = {this.handleDeleteItem}

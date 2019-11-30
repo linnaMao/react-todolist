@@ -12,7 +12,8 @@ import {
   modifyStepServer,
   modifyTitleServer,
   getTitleListServer,
-  insertTitleServer
+  insertTitleServer,
+  deleteTitleSever
 } from '../server'
 export function insertTodo (todo) {
   return insertTodoServer(todo)
@@ -70,4 +71,9 @@ export function getTitleList() {
 // 新增左侧标题
 export function insertTitle(titleValue) {
   return insertTitleServer(titleValue)
+}
+
+// 删除左侧标题
+export function deleteTitle(id) {
+  return deleteTitleSever(id)
 }

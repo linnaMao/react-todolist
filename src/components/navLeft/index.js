@@ -2,7 +2,7 @@ import React from 'react';
 import styled from './index.scss';
 import { Menu } from 'antd';
 import { IconFont } from '../Iconfont';
-import { getTitleList, insertTitle } from '../../axios'
+import {  insertTitle } from '../../axios'
 
 const { Item } = Menu;
 
@@ -10,18 +10,19 @@ class NavLeft extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      navList:[],
-      titleValue: ''
+      titleValue: '',
+      navList: []
     }
   }
 
   componentDidMount() {
-    this.getTitle()
+   this.getTitle()
   };
 
   getTitle = () => {
+    const { getTitle } = this.props
     this.setState({
-      navList: getTitleList()
+      navList: getTitle()
     })
   }
 
@@ -30,7 +31,6 @@ class NavLeft extends React.Component {
     const { handleTitleClick } = this.props
 
     return data.map((item) => {
-      console.log(item)
       return (
         <Item onClick={() => handleTitleClick(item)} key={item.id}>
           <IconFont type={item.icon} />
@@ -60,7 +60,7 @@ class NavLeft extends React.Component {
   }
 
   render() {
-    const { navList, titleValue } = this.state
+    const { titleValue, navList } = this.state
     return (
       <div>
         <div className={styled.user}>

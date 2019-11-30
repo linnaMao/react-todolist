@@ -10,6 +10,12 @@ class Header extends React.Component {
     const { handleHideClick } = this.props
     handleHideClick()
   }
+
+  handleDeleteTitle = () => {
+    const { handleDeleteTitle } = this.props
+    handleDeleteTitle()
+  }
+
   render() {
     const { title, hideTitle } = this.props
     const menu = (
@@ -18,7 +24,7 @@ class Header extends React.Component {
           <IconFont type="icon-yiwancheng" />
           {hideTitle ? "显示已完成任务" : "隐藏已完成任务"}
         </Item>
-        <Item className={styled.item}>
+        <Item className={styled.item} onClick={this.handleDeleteTitle}>
           <IconFont type="icon-lajitong-copy" />
           删除清单
         </Item>
@@ -29,7 +35,11 @@ class Header extends React.Component {
         <div className={styled.title}>{title}</div>
         <div className={styled.more}>
           <Dropdown overlay={menu}>
-            <Button className={styled.moreButton}>· · ·</Button>
+            <Button 
+              className={styled.moreButton}
+            >
+              · · ·
+            </Button>
           </Dropdown>
         </div>
       </div>
