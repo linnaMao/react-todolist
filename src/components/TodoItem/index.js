@@ -9,11 +9,11 @@ class TodoItem extends React.Component {
 
   // 点击完成
   handleFinishClick = () => {
-    const { content, getTodoListByTitle, currentTodoType } = this.props
+    const { content, getTodoListByTitle, checkedTitle } = this.props
     // 调接口设置
     finished(content.id)
     // 刷新一下
-    getTodoListByTitle(currentTodoType)
+    getTodoListByTitle(checkedTitle.id)
   }
 
   // 右栏显示
@@ -24,19 +24,19 @@ class TodoItem extends React.Component {
   }
 
   handleStarClick = () => {
-    const { content, getTodoListByTitle, currentTodoType } = this.props
+    const { content, getTodoListByTitle, checkedTitle } = this.props
     // 调接口设置
     star(content.id)
     // 刷新一下
-    getTodoListByTitle(currentTodoType)
+    getTodoListByTitle(checkedTitle.id)
   }
 
   handleDelete = () =>{
-    const { content, getTodoListByTitle, currentTodoType } = this.props
+    const { content, getTodoListByTitle, checkedTitle } = this.props
     // 调接口设置
     deleteItem(content.id)
     // 刷新一下
-    getTodoListByTitle(currentTodoType, content.id)
+    getTodoListByTitle(checkedTitle.id)
   }
 
   render() {
@@ -51,7 +51,7 @@ class TodoItem extends React.Component {
           onClick={this.handleFinishClick} 
         />
         <div onClick={this.handleClick} className={`${styled.content} ${content.isFinish ? styled.finished : ''}`}>
-          {content.title}
+          {content.listName}
         </div>
         <Icon type="star" className={styled.star} onClick={this.handleStarClick} theme={content.isStar ? "filled" : ""} />
         <Icon 

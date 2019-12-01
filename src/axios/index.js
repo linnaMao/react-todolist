@@ -13,10 +13,11 @@ import {
   modifyTitleServer,
   getTitleListServer,
   insertTitleServer,
-  deleteTitleSever
+  deleteTitleSever,
+  clearMyDayServer
 } from '../server'
-export function insertTodo (todo) {
-  return insertTodoServer(todo)
+export function insertTodo (value, titleId, isStar, isAddMyDay) {
+  return insertTodoServer(value, titleId, isStar, isAddMyDay)
 }
 
 export function getListByType(id) {
@@ -43,16 +44,16 @@ export function addRemark(id, value) {
   return addRemarkServer(id, value)
 }
 
-export function addStep(id, step) {
-  return addStepServer(id, step)
+export function addStep(id, value) {
+  return addStepServer(id, value)
 }
 
-export function deleteStep(id, step) {
-  return deleteStepServer(id, step)
+export function deleteStep(stepId) {
+  return deleteStepServer(stepId)
 }
 
-export function stepFinish(todoId, stepId) {
-  return stepFinishServer(todoId, stepId)
+export function stepFinish( stepId) {
+  return stepFinishServer( stepId)
 }
 
 export function modifyStep(todoId, stepId, value) {
@@ -76,4 +77,9 @@ export function insertTitle(titleValue) {
 // 删除左侧标题
 export function deleteTitle(id) {
   return deleteTitleSever(id)
+}
+
+// 我的一天仅存在当天
+export function  clearMyDay() {
+  return clearMyDayServer()
 }

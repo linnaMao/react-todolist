@@ -10,21 +10,14 @@ class NavLeft extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      titleValue: '',
-      navList: []
+      titleValue: ''
     }
   }
 
   componentDidMount() {
-   this.getTitle()
+   const { getTitle } = this.props
+   getTitle()
   };
-
-  getTitle = () => {
-    const { getTitle } = this.props
-    this.setState({
-      navList: getTitle()
-    })
-  }
 
   // 菜单
   renderList = (data) => {
@@ -50,17 +43,19 @@ class NavLeft extends React.Component {
   // 新增标题
   handleAddTitleEnter = (e) => {
     const { titleValue } = this.state
+    const { getTitle } = this.props
     if (e.nativeEvent.keyCode === 13 && titleValue !== "") {
       insertTitle(titleValue)
       this.setState({
         titleValue: ""
       })
-      this.getTitle()
+      getTitle()
     }
   }
 
   render() {
-    const { titleValue, navList } = this.state
+    const { titleValue } = this.state
+    const { navList } = this.props
     return (
       <div>
         <div className={styled.user}>
@@ -68,7 +63,7 @@ class NavLeft extends React.Component {
           <span className={styled.username}>毛某某</span>
           <IconFont type="icon-glass" className={styled.search} />
         </div>
-        <Menu defaultSelectedKeys="/admin/day" theme="light">
+        <Menu defaultSelectedKeys="title15751079871190" theme="light">
           {this.renderList(navList)}
         </Menu>
         <div className={styled.addNewList}>

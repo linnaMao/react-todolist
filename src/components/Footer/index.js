@@ -2,7 +2,6 @@ import React from 'react';
 import styled from './index.scss';
 import { IconFont } from '../Iconfont'
 
-import Todo from '../../db/Entity/Todo';
 import { insertTodo } from '../../axios';
 
 class Footer extends React.Component {
@@ -21,17 +20,16 @@ class Footer extends React.Component {
 
   handleEnterKey = (e) => {
     const { value } = this.state
-    const { getTodoListByTitle, currentTodoType } = this.props
+    const { getTodoListByTitle, checkedTitle } = this.props
 
     if (e.nativeEvent.keyCode === 13 && value !== "") {
       // 发起请求存todo
-      const todo = new Todo(value, [currentTodoType])
-      insertTodo(todo)
+      insertTodo(value, checkedTitle.id, checkedTitle.titleName === "重要", checkedTitle.titleName === "我的一天")
       this.setState({
         value: ''
       })
       // 更新页面
-      getTodoListByTitle(currentTodoType)
+      getTodoListByTitle(checkedTitle.id)
     }
     
   }

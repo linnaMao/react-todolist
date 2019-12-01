@@ -4,6 +4,5 @@ export default class Title{
     this.titleName =  titleName
     this.createTime = new Date().getTime
     this.icon = 'icon-hanbao'
-    this.todo = []
   }
 }

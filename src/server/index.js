@@ -1,4 +1,8 @@
 import Title from '../db/Entity/Title'
+import Todo from '../db/Entity/Todo'
+import TitleTodo from '../db/Entity/TitleTodo'
+import Step from '../db/Entity/Step'
+import moment from "moment";
 
 function getItem(name) {
   const json = localStorage.getItem(name) 
@@ -10,20 +14,48 @@ function setItem(name, item) {
   localStorage.setItem(name, newJson)
 }
 
-export function insertTodoServer(todo) {
+// value: todo的值
+// titleId
+export function insertTodoServer(value, titleId, isStar, isAddToMyDay) {
+  // 获取所有的表
+  const allTitle = getItem("Title")
+  const allTitleTodo = getItem("TitleTodo")
   const allTodo = getItem("Todo")
+
+  // 构造todo
+  const todo = new Todo(value, isStar, isAddToMyDay)
+  // 找到新的todo对应的title实体
+  const titleRes = allTitle.find(i=>i.id===titleId)
+  // 构造两者的联系
+  const titleTodoRelation = new TitleTodo(titleRes.id, todo.id)
+
+  // 更新数据表
   allTodo.push(todo)
-  setItem("Todo", allTodo)
+  allTitleTodo.push(titleTodoRelation)
+
+  // 同步表
+  setItem('Todo', allTodo)
+  setItem('TitleTodo', allTitleTodo)
 } 
 
 export function getListByTypeServer(id) {
-  const allTodo = getItem("todoItem")
-  const res = allTodo.filter(i => i.id === id)
-  return res
+  const allTodo = getItem("Todo")
+  const allTitleTodo = getItem("TitleTodo")
+  const allStep = getItem("Step")
+  // 遍历出title对应的todo的id
+  const todoIds = allTitleTodo.filter(i => i.titleId === id)
+  const todoRes = todoIds.map((item) => {
+    const step = allStep.filter(i => i.todoId === item.todoId)
+    return {
+      ...allTodo.find(i => i.id === item.todoId),
+      step
+    }
+  })
+  return todoRes
 }
 
 export function finishedServer(id) {
-  const allTodo = getItem("todoItem")
+  const allTodo = getItem("Todo")
   const res = allTodo.map((item) => {
     if (item.id === id) {
       return {
@@ -33,12 +65,19 @@ export function finishedServer(id) {
     }
     return {...item}
   })
-  setItem("todoItem", res)
+  setItem("Todo", res)
 }
 
 export function starServer(id) {
-  const allTodo = getItem("todoItem")
-  const res = allTodo.map((item) => {
+  const allTodo = getItem("Todo")
+  const allTitle = getItem("Title")
+  const allTitleTodo = getItem("TitleTodo")
+
+  // 找出是否存在当前todo
+  const existTitleTodo = allTitleTodo.find(i => i.titleId === allTitle[1].id && i.todoId === id)
+
+  // 设置星星
+  const todoRes = allTodo.map((item) => {
     if (item.id === id) {
       return {
         ...item,
@@ -47,29 +86,51 @@ export function starServer(id) {
     }
     return {...item}
   })
-  setItem("todoItem", res)
+  if (!existTitleTodo) {
+    // 设为重要
+    // 获取title为重要的id和当前点击的todoId
+    const titleTodoRelation = new TitleTodo(allTitle[1].id, id)
+    allTitleTodo.push(titleTodoRelation)
+    setItem("TitleTodo", allTitleTodo)
+  } else {
+    // 取消重要
+    const titleTodoRelation = allTitleTodo.filter(i => !(i.titleId === allTitle[1].id && i.todoId === id))
+    setItem("TitleTodo", titleTodoRelation)
+  }
+
+  setItem("Todo", todoRes)
 }
 
 export function deleteItemServer(id) {
-  const allTodo = getItem("todoItem")
-  const res = allTodo.filter((item) => {
-    return item.id !== id
-  })
-  setItem("todoItem", res)
+  const allTodo = getItem("Todo")
+  const allTitleTodo = getItem("TitleTodo")
+  // 删除todo
+  const todoRes = allTodo.filter(i => i.id !== id)
+  // 删除联系
+  const titleTodoRes = allTitleTodo.filter(i => i.todoId !== id)
+  setItem("Todo", todoRes)
+  setItem("TitleTodo", titleTodoRes)
 }
 
 export function addMyDayServer(id) {
-  const allTodo = getItem("todoItem")
-  const res = allTodo.map((item) => {
+  const allTodo = getItem("Todo")
+  const allTitle = getItem("Title")
+  const allTitleTodo = getItem("TitleTodo")
+
+  const titleTodo = new TitleTodo(allTitle[0].id, id)
+  allTitleTodo.push(titleTodo)
+
+  const todoRes = allTodo.map((item) => {
     if (item.id === id) {
       return {
         ...item,
-        type: "我的一天"
+        isAddMyDay: true
       }
     }
     return {...item}
   })
-  setItem("todoItem", res)
+  setItem("Todo", todoRes)
+  setItem("TitleTodo", allTitleTodo)
 }
 
 export function addRemarkServer(id, value) {
@@ -87,55 +148,31 @@ export function addRemarkServer(id, value) {
   setItem("todoItem", res)
 }
 
-export function addStepServer(id, step) {
-  const allTodo = getItem("todoItem")
-  const res = allTodo.map((item) => {
-    if(item.id === id) {
-      return {
-        ...item,
-        step
-      }
-    }
-    return {...item}
-  })
-  setItem("todoItem", res)
+export function addStepServer(id, value) {
+  const allStep = getItem("Step")
+  const step = new Step(id, value)
+  allStep.push(step)
+  setItem("Step", allStep)
 }
 
-export function deleteStepServer(id, step) {
-  const allTodo = getItem("todoItem")
-  const res = allTodo.map((item) => {
-    if(item.id === id) {
-      return {
-        ...item,
-        step
-      }
-    }
-    return {...item}
-  })
-  setItem("todoItem", res)
+export function deleteStepServer(stepId) {
+  const allStep = getItem("Step")
+  const stepRes = allStep.filter(i => i.id !== stepId)
+  setItem("Step", stepRes)
 }
 
-export function stepFinishServer(todoId, stepId) {
-  const allTodo = getItem("todoItem")
-  const todoRes = allTodo.map((item) => {
-    if (item.id === todoId) {
+export function stepFinishServer(stepId) {
+  const allStep = getItem("Step")
+  const stepRes = allStep.map((item) => {
+    if (item.id === stepId) {
       return {
         ...item,
-        step:item.step.map((item) => {
-          if (item.id === stepId) {
-            return {
-              ...item,
-              isFinish: !item.isFinish
-            }
-          }
-          return {...item}
-        })
+        isFinish: !item.isFinish
       }
     }
     return {...item}
   })
-
-  setItem("todoItem", todoRes)
+  setItem("Step", stepRes)
 }
 
 export function modifyStepServer(todoId, stepId, value) {
@@ -161,17 +198,17 @@ export function modifyStepServer(todoId, stepId, value) {
 }
 
 export function modifyTitleServer(todoId, value) {
-  const allTodo = getItem("todoItem")
+  const allTodo = getItem("Todo")
   const res = allTodo.map((item) => {
     if (item.id === todoId) {
       return {
         ...item,
-        title: value
+        listName: value
       }
     }
     return {...item}
   })
-  setItem("todoItem", res)
+  setItem("Todo", res)
 }
 
 export function getTitleListServer() {
@@ -191,4 +228,31 @@ export function deleteTitleSever(id) {
   const allTitle = getItem("Title")
   const res = allTitle.filter(i => i.id !== id)
   setItem("Title", res)
+}
+
+export function clearMyDayServer() {
+  // 现在的时间
+  const nowTime = new Date().getTime()
+
+  // 获取表
+  const allTodo = getItem("Todo")
+  let allTitleTodo = getItem("TitleTodo")
+
+
+  // 我的一天中同时又是过期的
+  const pastDay = allTodo.filter(i => {
+    return moment(i.createTime).isBefore(nowTime, 'day') && i.isAddMyDay
+  })
+
+  // 过滤之后的所有数据
+  const myDay = allTodo.filter(i => !(moment(i.createTime).isBefore(nowTime, 'day') && i.isAddMyDay))
+
+  // 过期的联系
+  pastDay.forEach(past => {
+    const pastRelation = allTitleTodo.filter(item => item.todoId !== past.id)
+    allTitleTodo = pastRelation
+  })
+
+  setItem("Todo", myDay)
+  setItem('TitleTodo', allTitleTodo)
 }

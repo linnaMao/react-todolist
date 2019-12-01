@@ -1,9 +1,8 @@
 import React from 'react';
 import styled from './index.scss';
 import TodoStep from './TodoStep';
-import Step from '../../db/Entity/Step';
 import Moment from '../Moment'
-import { Alert } from 'antd';
+import { Alert, message } from 'antd';
 import { IconFont } from '../Iconfont';
 import { 
   addMyDay, 
@@ -21,12 +20,9 @@ class NavRight extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      // checkedTodo: props.checkedTodo,
-      step: props.checkedTodo ? [...props.checkedTodo.step] : [],
       stepValue: '',
-      remarkValue: props.checkedTodo ? props.checkedTodo.remark : "",
-      titleValue: props.checkedTodo ? props.checkedTodo.title : "",
-      remarkTime: props.checkedTodo ? props.checkedTodo.remarkTime: ""
+      remarkValue: props.checkedTodo.remark,
+      titleValue: props.checkedTodo.listName
     }
     // 创建一个ref来存储textFocus中的Dom元素
     this.textFocus = React.createRef()
@@ -34,11 +30,8 @@ class NavRight extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      step: nextProps.checkedTodo ? [...nextProps.checkedTodo.step] : [],
-      // checkedTodo: nextProps.checkedTodo,
-      remarkValue: nextProps.checkedTodo ? nextProps.checkedTodo.remark : "",
-      titleValue: nextProps.checkedTodo ? nextProps.checkedTodo.title : "",
-      remarkTime: nextProps.checkedTodo ? nextProps.checkedTodo.remarkTime: ""
+      remarkValue: nextProps.checkedTodo.remark,
+      titleValue: nextProps.checkedTodo.listName
     })
   }
 
@@ -65,57 +58,48 @@ class NavRight extends React.Component {
 
   // 点击enter键添加todo
   handleEnterClick = (e) => {
-    const { stepValue, step } = this.state
-    const { getTodoListByTitle, currentTodoType, checkedTodo } = this.props
+    const { stepValue } = this.state
+    const { getTodoListByTitle, checkedTitle, checkedTodo } = this.props
     if (e.nativeEvent.keyCode === 13 && stepValue !== "") {
       this.setState({
-        step: [
-          ...step,
-          new Step(checkedTodo.id, stepValue)
-        ],
         stepValue: ''
       },() => {
         //根据id查找
-        addStep(checkedTodo.id,this.state.step)
-        getTodoListByTitle(currentTodoType)
+        addStep(checkedTodo.id, stepValue)
+        getTodoListByTitle(checkedTitle.id)
       })
     }
   }
 
   // 点击完成todo
   handleFinishClick = (content) => {
-    const { checkedTodo, getTodoListByTitle, currentTodoType } = this.props
+    const { getTodoListByTitle, checkedTitle } = this.props
     // 获取todo的id和step的id
-    stepFinish(checkedTodo.id, content.id)
-    getTodoListByTitle(currentTodoType)
+    stepFinish(content.id)
+    getTodoListByTitle(checkedTitle.id)
   }
 
   // 删除右列todo
-  handleClick = (index) => {
-    const { step } = this.state;
-    const { getTodoListByTitle, currentTodoType, checkedTodo } = this.props
-    step.splice(index, 1);
-    this.setState({
-      step:[...step]
-    })
-    deleteStep(checkedTodo.id, [...step])
-    getTodoListByTitle(currentTodoType)
+  handleClick = (item) => {
+    const { getTodoListByTitle, checkedTitle } = this.props
+    deleteStep(item.id)
+    getTodoListByTitle(checkedTitle.id)
   }
 
   // 删除整个todo
   handleDeleteItem = () => {
-    const { getTodoListByTitle, currentTodoType, checkedTodo, handleDeleteItem } = this.props
+    const { getTodoListByTitle, checkedTitle, handleDeleteItem } = this.props
     handleDeleteItem()
-    getTodoListByTitle(currentTodoType, checkedTodo.id)
+    getTodoListByTitle(checkedTitle.id)
   }
 
   // 添加到我的一天
   handleAddMyDay = () => {
-    const { getTodoListByTitle, checkedTodo, currentTodoType } = this.props
+    const { getTodoListByTitle, checkedTodo, checkedTitle } = this.props
     // 修改数据库
     addMyDay(checkedTodo.id)
     // 刷新页面
-    getTodoListByTitle(currentTodoType, checkedTodo.id)
+    getTodoListByTitle(checkedTitle.id)
   }
 
   // 跳出备注区域
@@ -135,15 +119,15 @@ class NavRight extends React.Component {
   // 修改标题
   handleModifyTitle = (e) => {
     const { titleValue } = this.state
-    const { getTodoListByTitle, currentTodoType, checkedTodo } = this.props
+    const { getTodoListByTitle, checkedTitle, checkedTodo } = this.props
     if (e.nativeEvent.keyCode === 13 && titleValue !== "") {
       // 更改数据库
       modifyTitle(checkedTodo.id, titleValue)
       // 更新页面
-      getTodoListByTitle(currentTodoType)
+      getTodoListByTitle(checkedTitle.id)
       this.textFocus.current.focus()
     } else if (e.nativeEvent.keyCode === 13 && titleValue === "") {
-      alert('标题不能为空')
+      message.error('标题不能为空~')
       this.setState({
         titleValue: checkedTodo.title
       })
@@ -161,14 +145,15 @@ class NavRight extends React.Component {
     getTodoListByTitle(currentTodoType)
   }
 
-  getTodoItem() {
-    const { step } = this.state
+  renderTodoItem = () => {
+    const { checkedTodo } = this.props
+    console.log(checkedTodo)
     return (
-      step.map((item, index) => (
+      checkedTodo.step.map((item, index) => (
         <TodoStep
           key={item.id}
           content={item}
-          handleClick={() => this.handleClick(index)}
+          handleClick={() => this.handleClick(item)}
           handleFinishClick={this.handleFinishClick}
           handleModifyStep={this.handleModifyStep}
         />
@@ -179,9 +164,10 @@ class NavRight extends React.Component {
   render() {
     const { checkedTodo, createTime } = this.props
     const { stepValue, remarkValue, titleValue, remarkTime } = this.state
+    console.log(titleValue)
     // 对checkoutTodo做一个判断
     if (checkedTodo === null || checkedTodo === undefined) {
-      return <div></div>
+      return <div />
     }
     return (
       <div>
@@ -195,7 +181,7 @@ class NavRight extends React.Component {
               onKeyPress={this.handleModifyTitle}
             />
           </div>
-          {this.getTodoItem()}
+          {this.renderTodoItem()}
           <div className={styled.add}>
             <IconFont type="icon-hao-copy" className={styled.plus} />
             <input
@@ -208,8 +194,7 @@ class NavRight extends React.Component {
             />
           </div>
         </div>
-        {
-          checkedTodo.type !== "我的一天" &&
+        {!checkedTodo.isAddMyDay &&
           <div className={styled.addMyDay} onClick={this.handleAddMyDay}>
             <IconFont type="icon-taiyang" />
             <span>添加到"我的一天"</span>
