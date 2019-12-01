@@ -104,7 +104,7 @@ class NavRight extends React.Component {
 
   // 跳出备注区域
   handleBlur = () => {
-    const { getTodoListByTitle, checkedTodo, currentTodoType } = this.props
+    const { getTodoListByTitle, checkedTodo, checkedTitle } = this.props
     const { remarkValue } = this.state
     // 修改数据库
     addRemark(checkedTodo.id, remarkValue)
@@ -113,7 +113,7 @@ class NavRight extends React.Component {
         remarkValue:""
       })
     }
-    getTodoListByTitle(currentTodoType)
+    getTodoListByTitle(checkedTitle.id)
   }
 
   // 修改标题
@@ -136,18 +136,17 @@ class NavRight extends React.Component {
 
   // 修改step内容
   handleModifyStep = (stepId, value) => {
-    const { getTodoListByTitle, checkedTodo, currentTodoType } = this.props
+    const { getTodoListByTitle, checkedTitle } = this.props
     // 更改数据库
-    modifyStep(checkedTodo.id, stepId, value)
+    modifyStep(stepId, value)
     // 通过current来访问DOM节点
     this.textFocus.current.focus()
     // 更新页面
-    getTodoListByTitle(currentTodoType)
+    getTodoListByTitle(checkedTitle.id)
   }
 
   renderTodoItem = () => {
     const { checkedTodo } = this.props
-    console.log(checkedTodo)
     return (
       checkedTodo.step.map((item, index) => (
         <TodoStep
@@ -162,8 +161,8 @@ class NavRight extends React.Component {
   }
 
   render() {
-    const { checkedTodo, createTime } = this.props
-    const { stepValue, remarkValue, titleValue, remarkTime } = this.state
+    const { checkedTodo } = this.props
+    const { stepValue, remarkValue, titleValue } = this.state
     console.log(titleValue)
     // 对checkoutTodo做一个判断
     if (checkedTodo === null || checkedTodo === undefined) {
@@ -212,11 +211,11 @@ class NavRight extends React.Component {
             className={styled.remarkTime}
             style={{ display: (remarkValue === ""|| remarkValue.trim().length === 0)?"none":"block" }}
             >
-              更新于{Moment.formateDate(remarkTime)}
+              更新于{Moment.formateDate(checkedTodo.remarkTime)}
           </div>
         </div>
         <div className={styled.createTime}>
-          <div className={styled.time}>创建于{createTime}</div>
+          <div className={styled.time}>创建于{Moment.formateDate(checkedTodo.createTime)}</div>
           <div className={styled.clearTip} onClick={this.handleDeleteItem}>
             <Alert message="删除任务" className={styled.tip} type="error" />
             <IconFont className={styled.clear} type="icon-lajitong" />

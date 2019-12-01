@@ -1,6 +1,5 @@
 import React from 'react';
 import { Row, Col, message } from 'antd';
-import Moment from './components/Moment';
 import NavLeft from './components/NavLeft';
 import NavRight from './components/NavRight';
 import Header from './components/Header';
@@ -21,9 +20,7 @@ class Admin extends React.Component {
       navList: [], // 左侧title
       checkedTodo: null, // 选中右边的todo
       isShow: false,
-      hideTitle: false,
-      createTime: "",
-      remarkTime: ""
+      hideTitle: false
     }
   }
 
@@ -92,13 +89,9 @@ class Admin extends React.Component {
   handleTodoClick = (todo) => {
     const { checkedTodo, isShow } = this.state
     let todoId = todo.id
-    let remarkTime = todo.remarkTime
-    let createTime = Moment.formateDate(todo.createTime)
     this.setState({
       checkedTodo: todo,
       isShow: true,
-      createTime,
-      remarkTime
     }, () =>{
       if (checkedTodo !== null && checkedTodo !== undefined) {
         (checkedTodo.id === todoId) && this.setState({
@@ -150,7 +143,7 @@ class Admin extends React.Component {
   }
 
   render() {
-    const { checkedTitle, checkedTodo, isShow, hideTitle, createTime, remarkTime,navList } = this.state
+    const { checkedTitle, checkedTodo, isShow, hideTitle, navList } = this.state
     return (
       <div>
         <Row type="flex" className={styled.container}>
@@ -170,10 +163,12 @@ class Admin extends React.Component {
             className={styled.main}
             >
             <Header 
-              title={checkedTitle.titleName}
+              checkedTitle={checkedTitle}
               hideTitle={hideTitle}
               handleHideClick={this.handleHideClick}
               handleDeleteTitle={this.handleDeleteTitle}
+              getTodoListByTitle={this.getTodoListByTitle}
+              getTitle={this.getTitle}
             />
             <Row className={styled.content}>
               {this.renderTodoItem()}
@@ -193,8 +188,6 @@ class Admin extends React.Component {
               checkedTodo={checkedTodo}
               getTodoListByTitle={this.getTodoListByTitle}
               checkedTitle={checkedTitle}
-              createTime={createTime}
-              remarkTime={remarkTime}
               handleDeleteItem = {this.handleDeleteItem}
             />}
           </Col>

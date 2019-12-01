@@ -63,7 +63,7 @@ class NavLeft extends React.Component {
           <span className={styled.username}>毛某某</span>
           <IconFont type="icon-glass" className={styled.search} />
         </div>
-        <Menu defaultSelectedKeys="title15751079871190" theme="light">
+        <Menu defaultSelectedKeys="title15751991087990" theme="light">
           {this.renderList(navList)}
         </Menu>
         <div className={styled.addNewList}>

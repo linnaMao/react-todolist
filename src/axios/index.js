@@ -14,7 +14,8 @@ import {
   getTitleListServer,
   insertTitleServer,
   deleteTitleSever,
-  clearMyDayServer
+  clearMyDayServer,
+  modifyListTitleServer
 } from '../server'
 export function insertTodo (value, titleId, isStar, isAddMyDay) {
   return insertTodoServer(value, titleId, isStar, isAddMyDay)
@@ -56,8 +57,8 @@ export function stepFinish( stepId) {
   return stepFinishServer( stepId)
 }
 
-export function modifyStep(todoId, stepId, value) {
-  return modifyStepServer(todoId, stepId, value)
+export function modifyStep(stepId, value) {
+  return modifyStepServer(stepId, value)
 }
 
 export function modifyTitle(todoId, value) {
@@ -80,6 +81,10 @@ export function deleteTitle(id) {
 }
 
 // 我的一天仅存在当天
-export function  clearMyDay() {
+export function clearMyDay() {
   return clearMyDayServer()
+}
+
+export function modifyListTitle(titleId, value) {
+  modifyListTitleServer(titleId, value)
 }

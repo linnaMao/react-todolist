@@ -1,11 +1,34 @@
 import React from 'react';
 import styled from './index.scss';
 import { Menu, Dropdown, Button } from 'antd';
-import { IconFont } from '../Iconfont'
+import { message } from 'antd';
+import { IconFont } from '../Iconfont';
+
+import { modifyListTitle } from '../../axios'
 
 const { Item } = Menu
 
 class Header extends React.Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      titleValue: props.checkedTitle.titleName
+    }
+    this.titleFocus = React.createRef()
+  }
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      titleValue: nextProps.checkedTitle.titleName
+    })
+  }
+
+  handleTitleChange = (e) => {
+    this.setState({
+      titleValue: e.target.value
+    })
+  }
+
   handleHideClick = () => {
     const { handleHideClick } = this.props
     handleHideClick()
@@ -16,8 +39,27 @@ class Header extends React.Component {
     handleDeleteTitle()
   }
 
+  // 修改标题
+  handleModifyTitle = (e) => {
+    const { titleValue } = this.state
+    const { checkedTitle, getTitle } = this.props
+      if (e.nativeEvent.keyCode === 13 && titleValue !== "") {
+        // 更改数据库
+        modifyListTitle(checkedTitle.id, titleValue)
+        // 更新页面
+        getTitle()
+        this.titleFocus.current.blur()
+      } else if (e.nativeEvent.keyCode === 13 && titleValue === "") {
+        message.error('标题不能为空~')
+        this.setState({
+          titleValue: checkedTitle.titleName
+        })
+      }
+  }
+
   render() {
-    const { title, hideTitle } = this.props
+    const { hideTitle, checkedTitle } = this.props
+    const { titleValue } = this.state
     const menu = (
       <Menu>
         <Item className={styled.item} onClick={this.handleHideClick}>
@@ -32,7 +74,17 @@ class Header extends React.Component {
     );
     return (
       <div className={styled.headerWrap}>
-        <div className={styled.title}>{title}</div>
+        {
+          checkedTitle.icon==="icon-hanbao" ? <input 
+          className={styled.title}
+          value={titleValue}
+          type="text"
+          onChange={this.handleTitleChange}
+          onKeyPress={this.handleModifyTitle}
+          ref={this.titleFocus}
+        />:
+          <div className={styled.title}>{checkedTitle.titleName}</div>
+        }
         <div className={styled.more}>
           <Dropdown overlay={menu}>
             <Button 

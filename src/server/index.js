@@ -134,7 +134,7 @@ export function addMyDayServer(id) {
 }
 
 export function addRemarkServer(id, value) {
-  const allTodo = getItem("todoItem")
+  const allTodo = getItem("Todo")
   const res = allTodo.map((item) => {
     if(item.id === id) {
       return {
@@ -145,7 +145,7 @@ export function addRemarkServer(id, value) {
     }
     return {...item}
   })
-  setItem("todoItem", res)
+  setItem("Todo", res)
 }
 
 export function addStepServer(id, value) {
@@ -175,26 +175,18 @@ export function stepFinishServer(stepId) {
   setItem("Step", stepRes)
 }
 
-export function modifyStepServer(todoId, stepId, value) {
-  const allTodo = getItem("todoItem")
-  const res = allTodo.map((item) => {
-    if (item.id === todoId) {
+export function modifyStepServer(stepId, value) {
+  const allStep = getItem("Step")
+  const stepRes = allStep.map((item) => {
+    if (item.id === stepId) {
       return {
         ...item,
-        step: item.step.map((item) => {
-          if (item.id === stepId) {
-            return {
-              ...item,
-              title: value
-            }
-          }
-          return {...item}
-        })
+        title: value
       }
     }
     return {...item}
   })
-  setItem("todoItem", res)
+  setItem("Step", stepRes)
 }
 
 export function modifyTitleServer(todoId, value) {
@@ -255,4 +247,18 @@ export function clearMyDayServer() {
 
   setItem("Todo", myDay)
   setItem('TitleTodo', allTitleTodo)
+}
+
+export function modifyListTitleServer(titleId, value) {
+  const allTitle = getItem("Title")
+  const titleRes = allTitle.map(item => {
+    if (item.id === titleId) {
+      return {
+        ...item,
+        titleName: value
+      }
+    }
+    return {...item}
+  })
+  setItem("Title", titleRes)
 }
