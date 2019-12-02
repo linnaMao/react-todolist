@@ -122,6 +122,15 @@ class Admin extends React.Component {
   getTitle = () => {
      this.setState({
       navList: getTitleList()
+    }, () => this.updateCheckedTitle())
+  }
+
+  // 更新最新的checkedTitle
+  updateCheckedTitle = () => {
+    const { navList, checkedTitle } = this.state
+    const newTitle = navList.find(i => i.id === checkedTitle.id)
+    this.setState({
+      checkedTitle: newTitle
     })
   }
 
@@ -130,7 +139,6 @@ class Admin extends React.Component {
     const { checkedTitle } = this.state
     if (checkedTitle.icon === "icon-hanbao") {
       deleteTitle(checkedTitle.id)
-
       this.setState({
         checkedTitle: initialCheckedTitle
       }, () => {
@@ -169,6 +177,7 @@ class Admin extends React.Component {
               handleDeleteTitle={this.handleDeleteTitle}
               getTodoListByTitle={this.getTodoListByTitle}
               getTitle={this.getTitle}
+              navList={navList}
             />
             <Row className={styled.content}>
               {this.renderTodoItem()}

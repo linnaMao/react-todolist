@@ -86,5 +86,5 @@ export function clearMyDay() {
 }
 
 export function modifyListTitle(titleId, value) {
-  modifyListTitleServer(titleId, value)
+  return modifyListTitleServer(titleId, value)
 }
