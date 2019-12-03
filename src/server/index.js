@@ -103,12 +103,15 @@ export function starServer(id) {
 
 export function deleteItemServer(id) {
   const allTodo = getItem("Todo")
+  const allStep = getItem("Step")
   const allTitleTodo = getItem("TitleTodo")
-  // 删除todo
+  // 删除todo和step
   const todoRes = allTodo.filter(i => i.id !== id)
+  const stepRes = allStep.filter(i => i.todoId !== id)
   // 删除联系
   const titleTodoRes = allTitleTodo.filter(i => i.todoId !== id)
   setItem("Todo", todoRes)
+  setItem("Step", stepRes)
   setItem("TitleTodo", titleTodoRes)
 }
 
@@ -216,9 +219,14 @@ export function insertTitleServer(titleValue) {
 
 }
 
-export function deleteTitleSever(id) {
+export function deleteTitleSever(titleId) {
+  // 删除标题列表的时候 要将其他三个表内有关东西删除
   const allTitle = getItem("Title")
-  const res = allTitle.filter(i => i.id !== id)
+  const allTodo = getItem("Todo")
+  const allStep = getItem("Step")
+  const allTitleTodo = getItem("TitleTodo")
+
+  const res = allTitle.filter(i => i.id !== titleId)
   setItem("Title", res)
 }
 
@@ -229,8 +237,6 @@ export function clearMyDayServer() {
   // 获取表
   const allTodo = getItem("Todo")
   let allTitleTodo = getItem("TitleTodo")
-
-
   // 我的一天中同时又是过期的
   const pastDay = allTodo.filter(i => {
     return moment(i.createTime).isBefore(nowTime, 'day') && i.isAddMyDay

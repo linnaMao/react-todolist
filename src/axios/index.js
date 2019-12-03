@@ -76,8 +76,8 @@ export function insertTitle(titleValue) {
 }
 
 // 删除左侧标题
-export function deleteTitle(id) {
-  return deleteTitleSever(id)
+export function deleteTitle(titleId) {
+  return deleteTitleSever(titleId)
 }
 
 // 我的一天仅存在当天
