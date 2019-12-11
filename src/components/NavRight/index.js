@@ -163,7 +163,6 @@ class NavRight extends React.Component {
   render() {
     const { checkedTodo } = this.props
     const { stepValue, remarkValue, titleValue } = this.state
-    console.log(titleValue)
     // 对checkoutTodo做一个判断
     if (checkedTodo === null || checkedTodo === undefined) {
       return <div />
