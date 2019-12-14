@@ -136,7 +136,7 @@ class Admin extends React.Component {
 
   // 删除左侧标题
   handleDeleteTitle = () => {
-    const { checkedTitle, checkedTodo } = this.state
+    const { checkedTitle } = this.state
     if (checkedTitle.icon === "icon-hanbao") {
       deleteTitle(checkedTitle.id)
       this.setState({
