@@ -60,7 +60,10 @@ class NavRight extends React.Component {
   handleEnterClick = (e) => {
     const { stepValue } = this.state
     const { getTodoListByTitle, checkedTitle, checkedTodo } = this.props
-    if (e.nativeEvent.keyCode === 13 && stepValue !== "") {
+    if (e.nativeEvent.keyCode === 13) {
+      if (stepValue.trim().length === 0) {
+        return message.error("内容不能为空~")
+      }
       this.setState({
         stepValue: ''
       },() => {

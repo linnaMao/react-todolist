@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from './index.scss';
-import { Menu } from 'antd';
+import { Menu, message } from 'antd';
 import { IconFont } from '../Iconfont';
 import {  insertTitle } from '../../axios'
 
@@ -44,7 +44,10 @@ class NavLeft extends React.Component {
   handleAddTitleEnter = (e) => {
     const { titleValue } = this.state
     const { getTitle } = this.props
-    if (e.nativeEvent.keyCode === 13 && titleValue !== "") {
+    if (e.nativeEvent.keyCode === 13) {
+      if (titleValue.trim().length === 0) {
+        return message.error("标题不能为空~")
+      }
       insertTitle(titleValue)
       this.setState({
         titleValue: ""
