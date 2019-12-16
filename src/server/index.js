@@ -221,37 +221,66 @@ export function insertTitleServer(titleValue) {
 
 export function deleteTitleSever(titleId) {
   // 删除标题列表的时候 要将其他三个表内有关东西删除
+  // 把所有表都获取到
   const allTitle = getItem("Title")
-  const allTodo = getItem("Todo")
-  const allStep = getItem("Step")
+  let allTodo = getItem("Todo")
+  let allStep = getItem("Step")
   const allTitleTodo = getItem("TitleTodo")
-  let todoIds = []
-  let titleTodoRes, todoRes, stepRes
-  allTitleTodo.map(item => {
-    if (item.titleId === titleId) {
-      todoIds.push(item.todoId)
-    }
-    return todoIds
-  })
-  if (todoIds.length === 1) {
-    titleTodoRes = allTitleTodo.filter(i => i.titleId !== titleId)
-    todoRes = allTodo.filter(i => i.id !== todoIds[0])
-    stepRes = allStep.filter(i => i.todoId !== todoIds[0])
-  } else if (todoIds.length === 2) {
-    titleTodoRes = allTitleTodo.filter(i => !(i.titleId === titleId || i.todoId === todoIds[0] || i.todoId === todoIds[1]))
-    todoRes = allTodo.filter(i => !(i.id === todoIds[0] || i.id === todoIds[1]))
-    stepRes = allStep.filter(i => !(i.todoId === todoIds[0] || i.todoId === todoIds[1]))
-  } else if (todoIds.length === 3) {
-    titleTodoRes = allTitleTodo.filter(i => !(i.titleId === titleId || i.todoId === todoIds[0] || i.todoId === todoIds[1]) || i.todoId === todoIds[2])
-    todoRes = allTodo.filter(i => !(i.id === todoIds[0] || i.id === todoIds[1] || i.id === todoIds[2]))
-    stepRes = allStep.filter(i => !(i.todoId === todoIds[0] || i.todoId === todoIds[1] || i.todoId === todoIds[2]))
-  }
+
   // 删除title
-  const titleRes = allTitle.filter(i => i.id !== titleId)
-  setItem("Title", titleRes)
-  setItem("Todo", todoRes)
-  setItem("Step", stepRes)
-  setItem("TitleTodo", titleTodoRes)
+  const filteredTitle = allTitle.filter(i => i.id !== titleId)
+  // title删除完毕
+
+  // 删除TitleTodo
+  const filteredTitleTodo = allTitleTodo.filter(i => i.titleId === titleId)
+  // TitleTodo删除完毕
+
+  // 删除todo（遍历的时候要根据todoId把对应的step也删了）
+  // 根据titleId获取所有的对应todoId（注意.filter后面还有个.map）
+  const todoIdList = allTitleTodo.filter(i => i.titleId === titleId).map(i => i.todoId)
+  // 用获取到的todoIdList遍历进行删除（一个一个删除）
+  todoIdList.forEach(id => {
+    // 这里的id是todoId
+    // 根据todoId删除todo
+    allTodo = allTodo.filter(i => i.id !== id)
+    // 此时要根据todoId删除step
+    allStep = allStep.filter(i => i.todoId !== id)
+  })
+  // todo和step删除完毕
+
+  // 把表进行更新
+  setItem('Title', filteredTitle)
+  setItem('TitleTodo', filteredTitleTodo)
+  setItem('Todo', allTodo)
+  setItem('Step', allStep)
+
+  // let todoIds = []
+  // let titleTodoRes, todoRes, stepRes
+  // allTitleTodo.map(item => {
+  //   if (item.titleId === titleId) {
+  //     todoIds.push(item.todoId)
+  //   }
+  //   return todoIds
+  // })
+  // if (todoIds.length === 1) {
+  //   titleTodoRes = allTitleTodo.filter(i => i.titleId !== titleId)
+  //   todoRes = allTodo.filter(i => i.id !== todoIds[0])
+  //   stepRes = allStep.filter(i => i.todoId !== todoIds[0])
+  // } else if (todoIds.length === 2) {
+  //   titleTodoRes = allTitleTodo.filter(i => !(i.titleId === titleId || i.todoId === todoIds[0] || i.todoId === todoIds[1]))
+  //   todoRes = allTodo.filter(i => !(i.id === todoIds[0] || i.id === todoIds[1]))
+  //   stepRes = allStep.filter(i => !(i.todoId === todoIds[0] || i.todoId === todoIds[1]))
+  // } else if (todoIds.length === 3) {
+  //   titleTodoRes = allTitleTodo.filter(i => !(i.titleId === titleId || i.todoId === todoIds[0] || i.todoId === todoIds[1]) || i.todoId === todoIds[2])
+  //   todoRes = allTodo.filter(i => !(i.id === todoIds[0] || i.id === todoIds[1] || i.id === todoIds[2]))
+  //   stepRes = allStep.filter(i => !(i.todoId === todoIds[0] || i.todoId === todoIds[1] || i.todoId === todoIds[2]))
+  // }
+  // // 删除title
+  // const titleRes = allTitle.filter(i => i.id !== titleId)
+  // setItem("Title", titleRes)
+  // setItem("Todo", todoRes)
+  // setItem("Step", stepRes)
+  // setItem("TitleTodo", titleTodoRes)
 }
 
 export function clearMyDayServer() {
@@ -260,7 +289,6 @@ export function clearMyDayServer() {
 
   // 获取表
   const allTodo = getItem("Todo")
-  const allStep = getItem("Step")
   let allTitleTodo = getItem("TitleTodo")
   // 我的一天中同时又是过期的
   const pastDay = allTodo.filter(i => {
