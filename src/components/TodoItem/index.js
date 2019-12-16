@@ -32,10 +32,11 @@ class TodoItem extends React.Component {
   }
 
   handleDelete = () =>{
-    const { content, getTodoListByTitle, checkedTitle } = this.props
-    // 调接口设置
-    deleteItem(content.id)
-    // 刷新一下
+    const { content, getTodoListByTitle, checkedTitle, handleDeleteItem } = this.props
+    handleDeleteItem(content)
+    // // 调接口设置
+    // deleteItem(content.id)
+    // // 刷新一下
     getTodoListByTitle(checkedTitle.id)
   }
 

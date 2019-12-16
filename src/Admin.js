@@ -48,6 +48,7 @@ class Admin extends React.Component {
             key={item.id}
             content={item}
             handleClick={this.handleTodoClick}
+            handleDeleteItem={this.handleDeleteItem}
             getTodoListByTitle={this.getTodoListByTitle}
           />
         if (!hideTitle) {
@@ -91,7 +92,7 @@ class Admin extends React.Component {
     let todoId = todo.id
     this.setState({
       checkedTodo: todo,
-      isShow: true,
+      isShow: true
     }, () =>{
       if (checkedTodo !== null && checkedTodo !== undefined) {
         (checkedTodo.id === todoId) && this.setState({
@@ -110,12 +111,12 @@ class Admin extends React.Component {
   }
 
   // 删除右列todo
-  handleDeleteItem = () => {
+  handleDeleteItem = (content) => {
     const { checkedTodo } = this.state
-    deleteItem(checkedTodo.id)
     this.setState({
       isShow: false
     })
+    content ? deleteItem(content.id) : deleteItem(checkedTodo.id)
   }
 
   // 获取title
@@ -140,7 +141,8 @@ class Admin extends React.Component {
     if (checkedTitle.icon === "icon-hanbao") {
       deleteTitle(checkedTitle.id)
       this.setState({
-        checkedTitle: initialCheckedTitle
+        checkedTitle: initialCheckedTitle,
+        isShow: false
       }, () => {
         this.getTitle()
         this.getTodoListByTitle(initialCheckedTitle.id)
