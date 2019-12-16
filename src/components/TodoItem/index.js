@@ -3,7 +3,7 @@ import styled from './index.scss';
 import { Icon } from 'antd';
 import { IconFont } from '../Iconfont';
 
-import { finished, star, deleteItem }  from '../../axios'
+import { finished, star }  from '../../axios'
 
 class TodoItem extends React.Component {
 
@@ -34,8 +34,6 @@ class TodoItem extends React.Component {
   handleDelete = () =>{
     const { content, getTodoListByTitle, checkedTitle, handleDeleteItem } = this.props
     handleDeleteItem(content)
-    // // 调接口设置
-    // deleteItem(content.id)
     // // 刷新一下
     getTodoListByTitle(checkedTitle.id)
   }
