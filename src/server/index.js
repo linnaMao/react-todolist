@@ -225,15 +225,11 @@ export function deleteTitleSever(titleId) {
   const allTitle = getItem("Title")
   let allTodo = getItem("Todo")
   let allStep = getItem("Step")
-  const allTitleTodo = getItem("TitleTodo")
+  let allTitleTodo = getItem("TitleTodo")
 
   // 删除title
   const filteredTitle = allTitle.filter(i => i.id !== titleId)
   // title删除完毕
-
-  // 删除TitleTodo
-  const filteredTitleTodo = allTitleTodo.filter(i => i.titleId === titleId)
-  // TitleTodo删除完毕
 
   // 删除todo（遍历的时候要根据todoId把对应的step也删了）
   // 根据titleId获取所有的对应todoId（注意.filter后面还有个.map）
@@ -245,12 +241,14 @@ export function deleteTitleSever(titleId) {
     allTodo = allTodo.filter(i => i.id !== id)
     // 此时要根据todoId删除step
     allStep = allStep.filter(i => i.todoId !== id)
+    // 更新TitleTodo
+    allTitleTodo = allTitleTodo.filter(i => i.todoId !== id)
   })
   // todo和step删除完毕
 
   // 把表进行更新
   setItem('Title', filteredTitle)
-  setItem('TitleTodo', filteredTitleTodo)
+  setItem('TitleTodo', allTitleTodo)
   setItem('Todo', allTodo)
   setItem('Step', allStep)
 
