@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon } from 'antd';
+import { Icon, message } from 'antd';
 import styled from './index.scss';
 import { IconFont } from '../Iconfont';
 
@@ -31,7 +31,7 @@ class TodoStep extends React.Component {
     if (e.nativeEvent.keyCode === 13 && value !== "")  {
       handleModifyStep(content.id, value)
     } else if(e.nativeEvent.keyCode === 13 && value === "") {
-      alert('内容不能为空')
+      message.error('内容不能为空')
       this.setState({
         value: content.title
       })

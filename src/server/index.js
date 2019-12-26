@@ -287,6 +287,7 @@ export function clearMyDayServer() {
 
   // 获取表
   const allTodo = getItem("Todo")
+  const allStep = getItem("Step")
   let allTitleTodo = getItem("TitleTodo")
   // 我的一天中同时又是过期的
   const pastDay = allTodo.filter(i => {
@@ -295,9 +296,9 @@ export function clearMyDayServer() {
 
   // 过滤之后的所有数据
   const myDay = allTodo.filter(i => !(moment(i.createTime).isBefore(nowTime, 'day') && i.isAddMyDay))
-  // const stepRes = myDay.map(item => {
-  //   return allStep.find(i => i.todoId === item.id)
-  // })
+  const stepRes = myDay.map(item => {
+    return allStep.find(i => i.todoId === item.id)
+  })
   // 过期的联系
   pastDay.forEach(past => {
     const pastRelation = allTitleTodo.filter(item => item.todoId !== past.id)
@@ -306,7 +307,7 @@ export function clearMyDayServer() {
 
   setItem("Todo", myDay)
   setItem('TitleTodo', allTitleTodo)
-  // setItem("Step", stepRes)
+  setItem("Step", stepRes)
 }
 
 export function modifyListTitleServer(titleId, value) {

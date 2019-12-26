@@ -222,8 +222,8 @@ class NavRight extends React.Component {
             <Alert message="删除任务" className={styled.tip} type="error" />
             <IconFont className={styled.clear} type="icon-lajitong" />
           </div>
-          </div>
         </div>
+      </div>
     )
   }
 }
