@@ -7,7 +7,7 @@ import Footer from './components/Footer';
 import TodoItem from './components/TodoItem';
 
 import styled from './Admin.scss';
-import { getListByType, deleteItem, deleteTitle, getTitleList, clearMyDay } from './axios';
+import { getListByType, deleteItem, deleteTitle, getTitleList } from './axios';
 
 // 初始化的checkTitle
 const initialCheckedTitle = JSON.parse(localStorage.getItem('Title'))[0]
@@ -25,7 +25,7 @@ class Admin extends React.Component {
   }
 
   componentDidMount() {
-    clearMyDay()
+    // clearMyDay()
     const { checkedTitle } = this.state
     const lists = getListByType(checkedTitle.id)
     this.setState({
